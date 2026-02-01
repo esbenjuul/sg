@@ -6,7 +6,7 @@ const MAX_LENGTH_MSG = (num: number) => `Must be at most ${num} characters`;
 
 export function Input(props) {
   const [valid, setValid] = useState(true);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onInput = (e: Event) => {
@@ -16,17 +16,21 @@ export function Input(props) {
     console.log(inputRef?.current?.validity);
     if (!valid && props.minLength && inputRef?.current?.validity.tooShort) {
       setMessage(MIN_LENGTH_MSG(props.minLength));
-    } else if (!valid && props.maxLength && inputRef?.current?.validity.tooLong) {
+    } else if (
+      !valid && props.maxLength && inputRef?.current?.validity.tooLong
+    ) {
       setMessage(MAX_LENGTH_MSG(props.maxLength));
-    } else if (!valid && props.required && inputRef?.current?.validity.valueMissing) {
+    } else if (
+      !valid && props.required && inputRef?.current?.validity.valueMissing
+    ) {
       setMessage("This field is required");
     }
     if (props.onInput) {
       props.onInput(e);
     }
-  }
+  };
   return (
-    <div className={`form-field ${valid ? "" : "invalid"}`} >
+    <div className={`form-field ${valid ? "" : "invalid"}`}>
       <label htmlFor={props.id}>{props.label}</label>
       <input
         type={props.type}
@@ -40,5 +44,6 @@ export function Input(props) {
         ref={inputRef}
       />
       {!valid && <p class="form-hint">{message}</p>}
-    </div>);
+    </div>
+  );
 }

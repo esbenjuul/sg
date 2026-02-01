@@ -62,9 +62,10 @@ export const handler = define.handlers({
       // Set cookie and return success
       const headers = new Headers({
         "Content-Type": "application/json",
-        "Set-Cookie": `session=${sessionToken}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${
-          60 * 60 * 24 * 7
-        }`,
+        "Set-Cookie":
+          `session=${sessionToken}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${
+            60 * 60 * 24 * 7
+          }`,
       });
 
       return new Response(

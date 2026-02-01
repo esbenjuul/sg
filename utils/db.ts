@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 
-const MONGODB_URI = Deno.env.get("MONGODB_URI") || "mongodb://admin:password123@localhost:27017";
+const MONGODB_URI = Deno.env.get("MONGODB_URI") ||
+  "mongodb://admin:password123@localhost:27017";
 const MONGODB_DB = Deno.env.get("MONGODB_DB") || "fresh_auth_app";
 
 let client: MongoClient | null = null;

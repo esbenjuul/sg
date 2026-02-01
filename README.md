@@ -1,12 +1,15 @@
 # Fresh Auth App
 
-A modern authentication system built with **Deno Fresh 2** and **MongoDB**, featuring secure user registration, login, and session management.
+A modern authentication system built with **Deno Fresh 2** and **MongoDB**,
+featuring secure user registration, login, and session management.
 
 ## Features
 
 - 🔒 **Secure Authentication**: Password hashing with bcrypt
-- 🍪 **Session Management**: HMAC-signed session tokens stored in HTTP-only cookies
-- 🗄️ **MongoDB Integration**: Reliable user data storage with native Deno MongoDB driver
+- 🍪 **Session Management**: HMAC-signed session tokens stored in HTTP-only
+  cookies
+- 🗄️ **MongoDB Integration**: Reliable user data storage with native Deno
+  MongoDB driver
 - ⚡ **Fresh 2**: Built on Deno Fresh 2 with Vite for optimal performance
 - 🎨 **Clean CSS**: Semantic HTML with vanilla CSS (no frameworks!)
 - 🐳 **Docker Support**: Easy local development with Docker Compose
@@ -40,7 +43,7 @@ docker-compose up -d
 docker-compose ps
 ```
 
-MongoDB will be available at `mongodb://localhost:27017`  
+MongoDB will be available at `mongodb://localhost:27017`\
 Mongo Express (Web UI) will be available at `http://localhost:8081`
 
 ### 3. Install Dependencies and Run
@@ -145,9 +148,11 @@ docker-compose logs -f mongodb
 ## API Endpoints
 
 ### POST `/api/auth/signup`
+
 Register a new user
 
 **Request Body:**
+
 ```json
 {
   "name": "John Doe",
@@ -157,6 +162,7 @@ Register a new user
 ```
 
 **Response:**
+
 ```json
 {
   "user": {
@@ -171,9 +177,11 @@ Register a new user
 ```
 
 ### POST `/api/auth/login`
+
 Login with existing credentials
 
 **Request Body:**
+
 ```json
 {
   "email": "john@example.com",
@@ -182,6 +190,7 @@ Login with existing credentials
 ```
 
 **Response:**
+
 ```json
 {
   "user": {
@@ -196,15 +205,19 @@ Login with existing credentials
 ```
 
 ### GET `/api/auth/logout`
+
 Logout and clear session
 
 **Response:** Redirects to home page
 
 ## Authentication Flow
 
-1. **Signup**: User creates an account → Password is hashed with bcrypt → User stored in MongoDB
-2. **Login**: User provides credentials → Password verified → Session token created and stored in HTTP-only cookie
-3. **Protected Routes**: Middleware checks session cookie → Verifies token → Loads user data → Makes available to routes
+1. **Signup**: User creates an account → Password is hashed with bcrypt → User
+   stored in MongoDB
+2. **Login**: User provides credentials → Password verified → Session token
+   created and stored in HTTP-only cookie
+3. **Protected Routes**: Middleware checks session cookie → Verifies token →
+   Loads user data → Makes available to routes
 4. **Logout**: Session cookie is cleared → User redirected to home page
 
 ## Adding Data Storage
@@ -225,10 +238,14 @@ export interface Post {
   createdAt: Date;
 }
 
-export async function createPost(userId: string, title: string, content: string) {
+export async function createPost(
+  userId: string,
+  title: string,
+  content: string,
+) {
   const db = await getDatabase();
   const posts = db.collection<Post>("posts");
-  
+
   return await posts.insertOne({
     userId,
     title,
@@ -251,10 +268,10 @@ export const handler: Handlers = {
     if (!user) {
       return new Response(null, { status: 401 });
     }
-    
+
     const { title, content } = await req.json();
     const post = await createPost(user._id, title, content);
-    
+
     return Response.json({ post });
   },
 };

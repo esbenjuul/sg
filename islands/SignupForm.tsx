@@ -25,9 +25,9 @@ export default function SignupForm() {
       setLoading(false);
       return;
     }
-    console.log(e.target)
+    console.log(e.target);
     const body = new FormData(e.target as HTMLFormElement);
-    console.log(body.keys())
+    console.log(body.keys());
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
@@ -58,56 +58,50 @@ export default function SignupForm() {
         </div>
       )}
 
-      
-        <Input
-          type="text"
-          id="name"
-          name="name"
-          label="Full Name"
-          onInput={(e) => setName((e.target as HTMLInputElement).value)}
-          placeholder="John Doe"
-          minLength={6}
-          required
-        ></Input>
+      <Input
+        type="text"
+        id="name"
+        name="name"
+        label="Full Name"
+        onInput={(e) => setName((e.target as HTMLInputElement).value)}
+        placeholder="John Doe"
+        minLength={6}
+        required
+      >
+      </Input>
 
-      
-      
+      <Input
+        type="email"
+        id="email"
+        name="email"
+        label="Email Address"
+        onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
+        required
+        placeholder="you@example.com"
+      />
 
-      
-        <Input
-          type="email"
-          id="email"
-          name="email"
-          label="Email Address"
-          onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
-          required
-          placeholder="you@example.com"
-        />
-      
+      <Input
+        type="password"
+        id="password"
+        name="password"
+        label="Password"
+        onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
+        required
+        minLength={6}
+        placeholder="••••••••"
+      />
 
-      
-        <Input
-          type="password"
-          id="password"
-          name="password"
-          label="Password"
-          onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
-          required
-          minLength={6}
-          placeholder="••••••••"
-        />
-      
-        <Input
-          type="password"
-          id="password-two"
-          name="passwordtwo"
-          label="Confirm Password"
-          onInput={(e) => setPasswordTwo((e.target as HTMLInputElement).value)}
-          required
-          minLength={6}
-          placeholder="••••••••"
-        />
-        
+      <Input
+        type="password"
+        id="password-two"
+        name="passwordtwo"
+        label="Confirm Password"
+        onInput={(e) => setPasswordTwo((e.target as HTMLInputElement).value)}
+        required
+        minLength={6}
+        placeholder="••••••••"
+      />
+
       <button
         type="submit"
         disabled={loading}

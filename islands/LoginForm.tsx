@@ -43,7 +43,6 @@ export default function LoginForm() {
         </div>
       )}
 
-   
       <Input
         type="email"
         id="email"
@@ -54,8 +53,7 @@ export default function LoginForm() {
         required
         placeholder="you@example.com"
       />
-    
-  
+
       <Input
         type="password"
         label="Password"
@@ -66,7 +64,6 @@ export default function LoginForm() {
         required
         placeholder="••••••••"
       />
-  
 
       <button
         type="submit"

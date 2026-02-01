@@ -4,7 +4,8 @@ export const handler: Handlers = {
   GET() {
     // Clear session cookie
     const headers = new Headers({
-      "Set-Cookie": "session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0",
+      "Set-Cookie":
+        "session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0",
       "Location": "/",
     });
 

@@ -11,18 +11,22 @@ export default define.page<void>(function HomePage(ctx) {
             <h1>Fresh Auth</h1>
           </div>
           <div class="nav-actions">
-            {user ? (
-              <>
-                <span class="user-info">Welcome, {user.name}!</span>
-                <a href="/dashboard" class="btn btn-primary">Dashboard</a>
-                <a href="/api/auth/logout" class="btn btn-secondary">Logout</a>
-              </>
-            ) : (
-              <>
-                <a href="/login" class="btn btn-secondary">Login</a>
-                <a href="/signup" class="btn btn-primary">Sign Up</a>
-              </>
-            )}
+            {user
+              ? (
+                <>
+                  <span class="user-info">Welcome, {user.name}!</span>
+                  <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+                  <a href="/api/auth/logout" class="btn btn-secondary">
+                    Logout
+                  </a>
+                </>
+              )
+              : (
+                <>
+                  <a href="/login" class="btn btn-secondary">Login</a>
+                  <a href="/signup" class="btn btn-primary">Sign Up</a>
+                </>
+              )}
           </div>
         </div>
       </nav>
@@ -50,12 +54,17 @@ export default define.page<void>(function HomePage(ctx) {
           <div class="feature-card">
             <div class="icon">🗄️</div>
             <h3>MongoDB Integration</h3>
-            <p>Reliable data storage with MongoDB for users and application data</p>
+            <p>
+              Reliable data storage with MongoDB for users and application data
+            </p>
           </div>
           <div class="feature-card">
             <div class="icon">⚡</div>
             <h3>Fast & Modern</h3>
-            <p>Built with Deno Fresh 2 for optimal performance and developer experience</p>
+            <p>
+              Built with Deno Fresh 2 for optimal performance and developer
+              experience
+            </p>
           </div>
         </div>
       </main>
