@@ -1,0 +1,26 @@
+# Deno
+.deno/
+deno.lock
+
+# Fresh build directory
+_fresh/
+
+# Environment variables
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Dependencies
+node_modules/

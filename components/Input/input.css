@@ -1,0 +1,43 @@
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  label {
+    font-size: 0.938rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 3px 1px rgba(25, 54, 77, 0.2);
+  }
+  input:user-invalid {
+    border-color: var(--error);
+    box-shadow: 0 0 3px 1px rgba(209, 111, 111, 0.2);
+  }
+
+  input::placeholder {
+    color: #adb5bd;
+  }
+
+  .form-hint {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-top: 0.375rem;
+  }
+
+}
