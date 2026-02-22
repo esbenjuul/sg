@@ -1,0 +1,26 @@
+@import "https://unpkg.com/open-props";
+
+.dialog::backdrop {
+  
+  backdrop-filter: blur(0.25rem);
+}
+
+.dialog {
+  width: 680px;
+  max-width: 80vw;
+  padding: 2rem;
+  margin: auto;
+  border: 0;
+  border-radius: 0.5rem;
+  box-shadow: hsl(0 0% 0% / 10%) 0 0 0.5rem 0.25rem;
+}
+
+.dialog-close-btn {
+  font-size: 0.75em;
+  position: absolute;
+  top: 0.25em;
+  right: 0.25em;
+}
+dialog[open] {
+    animation: var(--animation-slide-in-up) forwards;
+}
