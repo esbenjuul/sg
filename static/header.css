@@ -1,0 +1,57 @@
+.main-header {
+
+  .logo {
+    width: 60px;
+  }
+  .main-navigation {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    
+    a {
+     color: var(--text-primary);
+     text-decoration: none;
+     color: blue;
+    }
+   
+    
+  }
+  /* Navigation */
+nav {
+  background: var(--bg-card);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100; 
+}
+
+nav .nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 5rem;
+}
+
+nav h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+nav .nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+nav .user-info {
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.938rem;
+}
+  
+}
+
+

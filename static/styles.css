@@ -35,6 +35,11 @@ body {
   background: var(--bg-main);
   min-height: 100vh;
 }
+main {
+  .container {
+    margin-block: 2rem;
+  }
+}
 
 /* Layout */
 .container {
@@ -42,93 +47,15 @@ body {
   margin: 0 auto;
   padding: 0 1.5rem;
 }
-.logo {
-  width: 60px;
-}
 
-/* Navigation */
-nav {
-  background: var(--bg-card);
-  box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
 
-nav .nav-content {
+.row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 5rem;
+  
 }
-
-nav h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
-nav .nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-nav .user-info {
-  color: var(--text-secondary);
-  font-weight: 500;
-  font-size: 0.938rem;
-}
-
-/* Buttons */
-.btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.938rem;
-  text-align: center;
-}
-
-.btn-primary {
-  background: var(--primary);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: var(--text-primary);
-  border: 2px solid var(--border);
-}
-
-.btn-secondary:hover {
-  background: var(--bg-main);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.btn-large {
-  padding: 1rem 2.5rem;
-  font-size: 1.125rem;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none !important;
-}
+.row-align-right {
+    justify-content: flex-end;
+  }
 
 /* Hero Section */
 .hero {
@@ -278,11 +205,7 @@ form {
 }
 
 /* Dashboard */
-.dashboard {
-  padding: 3rem 0;
-}
-
-.dashboard-header {
+.content-box {
   background: var(--bg-card);
   padding: 3rem;
   border-radius: 1rem;
@@ -291,7 +214,9 @@ form {
   border: 1px solid var(--border);
 }
 
-.dashboard-header h2 {
+
+
+.content-box h2 {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
@@ -343,6 +268,27 @@ form {
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
 }
+
+.profile-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  
+  li {
+    display: flex;
+    padding-block: 1.5rem;
+    justify-content: flex-start;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  h4 {
+    font-weight: bold;
+  }
+  h4, span {
+    flex: 1;
+  } 
+}
+
 
 /* Dashboard Cards */
 .dashboard-grid {

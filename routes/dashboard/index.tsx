@@ -1,10 +1,28 @@
 import { define } from "../../utils/state.ts";
+//import '../../components/layouts/header.css';
+import { sendMail } from "../../utils/mailjet.ts";
+
+export const handler = define.handlers({
+    
+    async POST(ctx) {
+        const form = await ctx.req.formData();
+        const mailForm = form.get("mail");
+
+        await sendMail('Esben')
+
+        
+        console.log('send mail done');
+
+        return { data: { message: `${name} uploaded!` } };
+    },
+});
 
 export default define.page<void>(function DashboardPage(ctx) {
   const { user } = ctx.state;
 
   return (
     <>
+    <section class="container content-box">
       <div class="dashboard-header">
         <h2>Dashboard</h2>
 
@@ -22,6 +40,10 @@ export default define.page<void>(function DashboardPage(ctx) {
             <div class="profile-field">
               <span class="profile-label">User ID:</span>
               <span class="profile-value mono">{user._id}</span>
+            </div>
+            <div class="profile-field">
+              <span class="profile-label">Role:</span>
+              <span class="profile-value mono">{user.role}</span>
             </div>
           </div>
         </div>
@@ -63,6 +85,11 @@ export default define.page<void>(function DashboardPage(ctx) {
           features, store user data in MongoDB, and build your application!
         </p>
       </div>
+    </section>
+    <form name="mail" method="POST">
+      <button>Send mail</button>
+    </form>
+      
     </>
   );
 });

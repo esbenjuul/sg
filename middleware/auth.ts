@@ -1,12 +1,13 @@
 import type { Context } from "fresh";
 import { verifySessionToken } from "../utils/session.ts";
-import { findUserById } from "../utils/user.ts";
+import { findUserById, UserRole } from "../models/user/user.ts";
 
 export interface AuthState {
   user?: {
     _id: string;
     email: string;
     name: string;
+    role: UserRole
   };
 }
 
@@ -29,6 +30,8 @@ export async function authMiddleware(ctx: Context<AuthState>) {
             _id: user._id,
             email: user.email,
             name: user.name,
+            role: user.role
+
           };
         }
       }

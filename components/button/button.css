@@ -1,0 +1,67 @@
+
+/* Buttons */
+.button {
+  display: inline-block;
+  padding-inline: 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.938rem;
+  text-align: center;
+  height: 40px;
+  > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    >span {
+        white-space: nowrap;
+    }
+    >svg {
+        width: 24px;
+        
+        fill: currentColor;
+    }
+  }
+}
+
+.button-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.button-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--border);
+}
+
+.button-secondary:hover {
+  background: var(--bg-main);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.button-large {
+  padding: 1rem 2.5rem;
+  font-size: 1.125rem;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+button:invalid {
+  
+    cursor: not-allowed;
+    background-color: var(--color-bg-invalid);
+}

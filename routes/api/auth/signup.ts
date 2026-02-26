@@ -1,5 +1,5 @@
 import type { Context } from "fresh";
-import { createUser, sanitizeUser } from "../../../utils/user.ts";
+import { createUser, sanitizeUser } from "../../../models/user/user.ts";
 import {
   createSessionExpiry,
   createSessionToken,
@@ -7,6 +7,7 @@ import {
 import { define } from "../../../utils/state.ts";
 
 import { AuthState } from "../../../middleware/auth.ts";
+import { sendMail } from "../../../utils/mailersend.ts";
 
 interface SignupRequest {
   email: string;
@@ -69,7 +70,11 @@ export const handler = define.handlers({
             60 * 60 * 24 * 7
           }`,
       });
-
+      try {
+        await sendMail(user.name, user.email);
+      } catch (err) {
+        console.error('mailsender', err);
+      }
       return new Response(
         JSON.stringify({ user, message: "Signup successful" }),
         { status: 201, headers },
