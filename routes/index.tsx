@@ -1,8 +1,15 @@
+import { useState } from "preact/hooks";
 import { define } from "../utils/state.ts";
+
+import DialogTest from "../islands/DialogTest.tsx";
 
 export default define.page<void>(function HomePage(ctx) {
   const { user } = ctx.state;
-
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const handleOpenDialog = (e: Event) => {
+    console.log(e);
+    setDialogOpen(true);
+  };
   return (
     <div>
       <nav>
@@ -68,6 +75,7 @@ export default define.page<void>(function HomePage(ctx) {
           </div>
         </div>
       </main>
+      <DialogTest></DialogTest>
     </div>
   );
 });
