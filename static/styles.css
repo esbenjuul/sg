@@ -22,6 +22,7 @@
   --error-bg: #fef2f2;
   --shadow: 0 2px 4px rgba(29, 53, 87, 0.08);
   --shadow-lg: 0 8px 16px rgba(29, 53, 87, 0.12);
+  --color-border: #d3d3d3;
 }
 
 body {
@@ -47,15 +48,36 @@ main {
   margin: 0 auto;
   padding: 0 1.5rem;
 }
+.icon-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  svg {
+    width: 24px;
+  }
+  span {
+    white-space: nowrap;
+  }
+}
 
 
 .row {
   display: flex;
-  
+  gap: 12px;
+  &.row-deck {
+    padding-bottom: 1rem;
+    margin-block: 2rem;
+
+    border-bottom: 1px solid var(--color-border);
+  }  
 }
 .row-align-right {
     justify-content: flex-end;
-  }
+}
+.row-split {
+  justify-content: space-between;
+}
+
 
 /* Hero Section */
 .hero {
@@ -212,6 +234,9 @@ form {
   box-shadow: var(--shadow);
   margin-bottom: 2.5rem;
   border: 1px solid var(--border);
+  .row:not(.row-deck) {
+    margin-bottom: 1rem;
+  }
 }
 
 
@@ -298,43 +323,6 @@ form {
   margin-bottom: 2.5rem;
 }
 
-.dashboard-card {
-  background: var(--bg-card);
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
-  transition: all 0.3s ease;
-}
-
-.dashboard-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--primary);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
-}
-
-.card-header h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.card-header .icon {
-  font-size: 2rem;
-  opacity: 0.8;
-}
-
-.dashboard-card p {
-  color: var(--text-light);
-  line-height: 1.7;
-}
 
 .info-banner {
   background: linear-gradient(135deg, #fef3f4 0%, #fde8e9 100%);

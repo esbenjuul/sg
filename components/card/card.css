@@ -1,0 +1,50 @@
+
+.card {
+  background: var(--bg-card);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  text-decoration: none; 
+    
+ 
+    
+    
+  
+  figure {
+    width: 45px;
+  }
+  img {
+    max-width: 100%;
+  }
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.card-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-header .icon {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+.card p {
+  color: var(--text-light);
+  line-height: 1.7;
+}

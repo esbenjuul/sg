@@ -19,7 +19,7 @@ const Dialog = (
 
   const handleKeyDown = (event) => {
     if (event.key === "Escape") {
-      handleCloseD();
+      handleCloseDialog();
     }
   };
 

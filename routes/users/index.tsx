@@ -1,18 +1,16 @@
 import { HttpError, page } from "fresh";
 import { ConventusUser, getUsers, importUsers } from "../../models/user/user.ts";
-import { define } from "../../utils/state.ts";
-import { Input } from "../../components/Input/Input.tsx"
-import { PlusIcon } from "../../components/icons/PlusIcon.tsx"
-import { Button } from "../../components/button/button.tsx"
+import { define } from "@/utils/state.ts";
+import { PlusIcon } from "@/components/icons/PlusIcon.tsx"
 import neatCsv from 'neat-csv';
 import camelcase from 'camelcase';
-import { ImportIcon } from "../../components/icons/ImportIcon.tsx";
+import UploadUsers from '@/islands/UploadUsers.tsx'
 
 export const handler = define.handlers({
     async GET() {
         try {
             const users = await getUsers();
-            return page({users});
+            return page({users, importResult: null});
         } catch(err) {
             console.error(err);
             throw new HttpError(500);
@@ -34,25 +32,39 @@ export const handler = define.handlers({
         const importResult = await importUsers(parsed as ConventusUser[]);
         console.log(importResult);
 
-        return { data: { message: `${name} uploaded!` } };
+        //return { data: { message: `${name} uploaded!` } };
+        try {
+            const users = await getUsers();
+            return page({users, importResult});
+        } catch(err) {
+          console.error(err);
+          throw new HttpError(500);
+        }
+      
     },
 });
 
 export default define.page<typeof handler>(function UsersPage({data}) {
-
+  
   return (
     <>
     <section class="container">
       <div class="content-box">
-        <h2>Users</h2>
+        <h2>Users</h2>  
+        {data.importResult &&  
+          <div>
+          duplicates: {data.importResult.numberOfDublicates} <br/>
+          imports: {data.importResult.numberOfImports}</div>
+        }
+
         <div class="row row-align-right">
-          <a href="/users/create-resource"><ImportIcon></ImportIcon> Create user</a>
-          <Button buttonType="primary"><PlusIcon></PlusIcon><span>Create user</span></Button>
+          <a href="/users/create-user" class="icon-link"><PlusIcon></PlusIcon><span>Create user</span> </a>
+          <UploadUsers></UploadUsers>
         </div>
-            <form method="post" encType="multipart/form-data">
+            {/* <form method="post" encType="multipart/form-data">
                 <Input type="file" name="file" label="upload csv file from conventus"></Input>
                 <button>upload</button>
-            </form>
+            </form> */}
 
         <article class="profile-section">
           
@@ -73,6 +85,7 @@ export default define.page<typeof handler>(function UsersPage({data}) {
           </ul>
         </article>
       </div>
+      
     </section>
    
     </>

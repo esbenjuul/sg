@@ -9,6 +9,8 @@ app.use(staticFiles());
 // Layouts
 app.layout("/dashboard", PageLayout, { skipInheritedLayouts: true });
 app.layout("/users", PageLayout, { skipInheritedLayouts: true });
+app.layout("/teams", PageLayout, { skipInheritedLayouts: true });
+
 // Auth middleware
 app.use(authMiddleware);
 
