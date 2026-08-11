@@ -1,3 +1,5 @@
+@import "./style/login.css";
+
 /* Reset and Base Styles */
 * {
   margin: 0;
@@ -6,9 +8,9 @@
 }
 
 :root {
-  --primary: #e63946;
-  --primary-dark: #d62828;
-  --primary-light: #f77f88;
+  --primary: #1f4386;
+  --primary-dark: color-mix(in srgb, var(--primary) 80%, black);
+  --primary-light: color-mix(in srgb, var(--primary) 70%, white);
   --accent: #457b9d;
   --accent-dark: #1d3557;
   --bg-main: #f8f9fa;
@@ -41,6 +43,14 @@ main {
     margin-block: 2rem;
   }
 }
+.reset-button {
+  background: none;
+  border: none;
+}
+
+.background-primary {
+  background-color: var(--background);
+}
 
 /* Layout */
 .container {
@@ -59,7 +69,22 @@ main {
     white-space: nowrap;
   }
 }
-
+.design-lib {
+  article {
+    margin-block: 7rem;
+  }
+  .components {
+    display: flex;
+    gap: 4px;
+  }
+  .icon-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 1rem;
+  }
+}
 
 .row {
   display: flex;
@@ -69,45 +94,13 @@ main {
     margin-block: 2rem;
 
     border-bottom: 1px solid var(--color-border);
-  }  
+  }
 }
 .row-align-right {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 .row-split {
   justify-content: space-between;
-}
-
-
-/* Hero Section */
-.hero {
-  text-align: center;
-  padding: 5rem 1.5rem 4rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-}
-
-.hero h2 {
-  font-size: 3.5rem;
-  font-weight: 800;
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
-
-.hero p {
-  font-size: 1.25rem;
-  color: var(--text-secondary);
-  max-width: 48rem;
-  margin: 0 auto 2.5rem;
-  line-height: 1.7;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
 }
 
 /* Feature Grid */
@@ -239,8 +232,6 @@ form {
   }
 }
 
-
-
 .content-box h2 {
   font-size: 2.5rem;
   font-weight: 700;
@@ -298,7 +289,7 @@ form {
   list-style: none;
   display: flex;
   flex-direction: column;
-  
+
   li {
     display: flex;
     padding-block: 1.5rem;
@@ -311,9 +302,8 @@ form {
   }
   h4, span {
     flex: 1;
-  } 
+  }
 }
-
 
 /* Dashboard Cards */
 .dashboard-grid {
@@ -322,7 +312,6 @@ form {
   gap: 2rem;
   margin-bottom: 2.5rem;
 }
-
 
 .info-banner {
   background: linear-gradient(135deg, #fef3f4 0%, #fde8e9 100%);

@@ -95,11 +95,9 @@ export default define.page<typeof handler>(function CreateUserPage(_ctx) {
             <Button type="submit" buttonType="primary">
               Create user
             </Button>
-
           </div>
         </form>
       </div>
     </section>
   );
 });
-

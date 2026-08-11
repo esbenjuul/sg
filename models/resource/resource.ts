@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import * as bcrypt from "bcrypt";
 import { getDatabase } from "../../utils/db.ts";
 
-export type UserRole = 'admin' | 'teamlead' | 'member' | 'novice'
+export type UserRole = "admin" | "teamlead" | "member" | "novice";
 
 export interface Resource {
   _id?: ObjectId;
@@ -47,7 +47,6 @@ export async function createUser(
       name,
       createdAt: new Date(),
       updatedAt: new Date(),
-
     };
 
     const insertedId = await resourceCollection.insertOne(user);
@@ -67,17 +66,18 @@ export async function createUser(
 
 export async function createUpload(
   resources: Resource[],
-): Promise<{insertedIds: any, insertedCount: number } | null> {
+): Promise<{ insertedIds: any; insertedCount: number } | null> {
   try {
     const db = await getDatabase();
     const resourceCollection = db.collection<Resource>(RESOURCE_COLLECTION);
 
-
-    const {insertedIds, insertedCount} = await resourceCollection.insertMany(resources);
+    const { insertedIds, insertedCount } = await resourceCollection.insertMany(
+      resources,
+    );
 
     return {
-        insertedIds,
-        insertedCount
+      insertedIds,
+      insertedCount,
     };
   } catch (error) {
     console.error("Error creating user:", error);
@@ -144,7 +144,6 @@ export async function createUpload(
 //     return false;
 //   }
 // }
-
 
 // export function sanitizeUser(user: User): UserResponse {
 //   return {

@@ -20,6 +20,22 @@
   position: absolute;
   top: 0.25em;
   right: 0.25em;
+  width: 40px;
+  aspect-ratio: 1;
+  .icon {
+    width: 24px;
+    height: 24px;
+  }
+  > span {
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+  }
 }
 dialog[open] {
     animation: var(--animation-slide-in-up) forwards;

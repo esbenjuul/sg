@@ -1,0 +1,21 @@
+.hero {
+  &.hero-login {
+    display: flex;
+    min-height: 100vh;
+  }
+  .hero-col {
+    flex: 50%;
+  }
+  .hero-image {
+    figure {
+      background-position: center center;
+      background-size: cover;
+      height: 100%;
+      opacity: 0.7;
+    }
+  }
+}
+
+.bg-panel {
+  background-color: #f2e86f;
+}

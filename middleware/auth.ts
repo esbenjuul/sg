@@ -7,7 +7,7 @@ export interface AuthState {
     _id: string;
     email: string;
     name: string;
-    role: UserRole
+    role: UserRole;
   };
 }
 
@@ -30,8 +30,7 @@ export async function authMiddleware(ctx: Context<AuthState>) {
             _id: user._id,
             email: user.email,
             name: user.name,
-            role: user.role
-
+            role: user.role,
           };
         }
       }

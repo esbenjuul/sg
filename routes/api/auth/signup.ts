@@ -73,7 +73,7 @@ export const handler = define.handlers({
       try {
         await sendMail(user.name, user.email);
       } catch (err) {
-        console.error('mailsender', err);
+        console.error("mailsender", err);
       }
       return new Response(
         JSON.stringify({ user, message: "Signup successful" }),

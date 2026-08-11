@@ -13,21 +13,28 @@ export default define.page<void>(function LoginPage(ctx) {
   }
 
   return (
-    <div class="auth-container">
-      <div class="auth-card">
-        <div class="auth-header">
-          <h2>Welcome Back</h2>
-          <p>Sign in to your account</p>
-        </div>
+    <div class="background-primary hero hero-login">
+      <section className="hero-col hero-image bg-panel">
+        <figure style={{ backgroundImage: "url('/img/gymnastik_unge.webp')" }}>
+        </figure>
+      </section>
 
-        <LoginForm />
+      <section className="hero-col">
+        <div class="auth-card">
+          <div class="auth-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to your account</p>
+          </div>
 
-        <div class="auth-footer">
-          <p>
-            Don't have an account? <a href="/signup">Sign up</a>
-          </p>
+          <LoginForm />
+
+          <div class="auth-footer">
+            <p>
+              Don't have an account? <a href="/signup">Sign up</a>
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 });

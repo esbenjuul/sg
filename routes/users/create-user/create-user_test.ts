@@ -3,10 +3,7 @@ import {
   assertRejects,
 } from "https://deno.land/std@0.224.0/testing/asserts.ts";
 import { HttpError } from "fresh";
-import {
-  handleCreateUser,
-  type CreateUserDeps,
-} from "./create-user.tsx";
+import { type CreateUserDeps, handleCreateUser } from "./create-user.tsx";
 
 Deno.test("handleCreateUser creates user and redirects to /users", async () => {
   const form = new FormData();
@@ -55,4 +52,3 @@ Deno.test(
     );
   },
 );
-

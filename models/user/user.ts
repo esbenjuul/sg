@@ -2,8 +2,8 @@ import { ObjectId } from "mongodb";
 import * as bcrypt from "bcrypt";
 import { getDatabase } from "../../utils/db.ts";
 
-export type UserRole = 'admin' | 'teamlead' | 'member' | 'trainer' | 'reader'
-export type UserStatus = 'active' | 'inactive' | 'authenticate_wait'; 
+export type UserRole = "admin" | "teamlead" | "member" | "trainer" | "reader";
+export type UserStatus = "active" | "inactive" | "authenticate_wait";
 
 export type ConventusUser = {
   afdeling: string;
@@ -15,8 +15,7 @@ export type ConventusUser = {
   mobil: string;
   eMail: string;
   fødselsdag: string;
-}
-
+};
 
 export interface User {
   _id?: ObjectId;
@@ -25,16 +24,14 @@ export interface User {
   password: string;
   mobile?: string;
   conventusId?: string;
-  birthday?: string; 
-  metadata?: Record<string, any> 
+  birthday?: string;
+  metadata?: Record<string, any>;
   status?: UserStatus;
 }
 export interface UserDetails extends User {
   createdAt: Date;
   updatedAt: Date;
   role: UserRole;
-  
-  
 }
 
 export interface UserResponse {
@@ -52,8 +49,10 @@ export interface ImportResponse {
 
 const USERS_COLLECTION = "users";
 
-export async function createUser({name, email, password, birthday='', mobile='', status='inactive'}: User): Promise<UserResponse | null> {
-  
+export async function createUser(
+  { name, email, password, birthday = "", mobile = "", status = "inactive" }:
+    User,
+): Promise<UserResponse | null> {
   try {
     const db = await getDatabase();
     const usersCollection = db.collection<UserDetails>(USERS_COLLECTION);
@@ -73,7 +72,7 @@ export async function createUser({name, email, password, birthday='', mobile='',
       name,
       createdAt: new Date(),
       updatedAt: new Date(),
-      role: 'member',
+      role: "member",
       status,
       mobile,
     };
@@ -86,8 +85,7 @@ export async function createUser({name, email, password, birthday='', mobile='',
       name: user.name,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
-      role: user.role
-      
+      role: user.role,
     };
   } catch (error) {
     console.error("Error creating user:", error);
@@ -128,15 +126,15 @@ export async function findUserById(id: string): Promise<UserResponse | null> {
     return null;
   }
 }
-export async function getUsers(): Promise<Array<UserDetails> | null>{
-    try {
-        const db = await getDatabase();
-        const usersCollection = db.collection<User>(USERS_COLLECTION);
-        const users = await usersCollection.find();
-        //console.log("db", await users.map((a)=>a));
-        return users.map((user) => ({
-            ...user
-        }));
+export async function getUsers(): Promise<Array<UserDetails> | null> {
+  try {
+    const db = await getDatabase();
+    const usersCollection = db.collection<User>(USERS_COLLECTION);
+    const users = await usersCollection.find();
+    //console.log("db", await users.map((a)=>a));
+    return users.map((user) => ({
+      ...user,
+    }));
   } catch (error) {
     console.error("Error finding users:", error);
     return null;
@@ -155,7 +153,6 @@ export async function verifyPassword(
   }
 }
 
-
 export function sanitizeUser(user: User): UserResponse {
   return {
     _id: user._id!.toString(),
@@ -163,35 +160,35 @@ export function sanitizeUser(user: User): UserResponse {
     name: user.name,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
-    role: user.role
+    role: user.role,
   };
 }
 
-export async function importUsers(users: ConventusUser[]): ImportResponse | undefined  {
-  if(!users) {
+export async function importUsers(
+  users: ConventusUser[],
+): ImportResponse | undefined {
+  if (!users) {
     return;
   }
   let numberOfDublicates = 0;
   let numberOfImports = 0;
-  
-  for(const user of users) {
-    
-    const userExist = await findUserByEmail(user.eMail)
+
+  for (const user of users) {
+    const userExist = await findUserByEmail(user.eMail);
     if (userExist) {
-      numberOfDublicates++
+      numberOfDublicates++;
     } else {
       await createUser({
         name: user.navn,
         email: user.eMail,
-        password: 'welcome123!',
-        status: 'inactive',
+        password: "welcome123!",
+        status: "inactive",
         conventusId: user.id,
-        birthday: user['fødselsdag'],
-        mobile: `${user.mobilLandeKode}${user.mobil}`
-
-      })
-      numberOfImports++
+        birthday: user["fødselsdag"],
+        mobile: `${user.mobilLandeKode}${user.mobil}`,
+      });
+      numberOfImports++;
     }
   }
-  return { numberOfDublicates, numberOfImports }
+  return { numberOfDublicates, numberOfImports };
 }

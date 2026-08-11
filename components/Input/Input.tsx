@@ -1,4 +1,3 @@
-
 import { useRef, useState } from "preact/hooks";
 import "./input.css";
 

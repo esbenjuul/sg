@@ -1,6 +1,5 @@
 import type { PageProps } from "fresh";
 
-
 export default function App({ Component }: PageProps) {
   return (
     <html>
@@ -14,8 +13,7 @@ export default function App({ Component }: PageProps) {
           href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet"
         />
-
-
+        <link rel="stylesheet" href="/style/theme.css" />
         <link rel="stylesheet" href="/styles.css" />
         <link rel="stylesheet" href="/header.css" />
       </head>

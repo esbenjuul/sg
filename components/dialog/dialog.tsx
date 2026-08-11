@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "preact/hooks";
 import { HTMLAttributes } from "preact";
 import "./dialog.css";
+import { CloseIcon } from "../icons/CloseIcon.tsx";
 interface DialogProps extends HTMLAttributes<HTMLDialogElement> {
   isOpen: boolean;
   hasCloseBtn?: boolean;
@@ -37,8 +38,9 @@ const Dialog = (
   return (
     <dialog ref={modalRef} onKeyDown={handleKeyDown} className="dialog">
       {hasCloseBtn && (
-        <button className="dialog-close-btn" onClick={handleCloseDialog}>
-          Close
+        <button className="reset-button dialog-close-btn" onClick={handleCloseDialog}>
+          <CloseIcon />
+          <span>Close</span>
         </button>
       )}
       {children}

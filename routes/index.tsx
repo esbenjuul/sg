@@ -1,6 +1,4 @@
-
 import { define } from "../utils/state.ts";
-
 
 export default define.page<void>(function HomePage(ctx) {
   const { user } = ctx.state;
@@ -70,7 +68,6 @@ export default define.page<void>(function HomePage(ctx) {
           </div>
         </div>
       </main>
-      
     </div>
   );
 });

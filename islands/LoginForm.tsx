@@ -1,7 +1,6 @@
 import { useState } from "preact/hooks";
 import { Input } from "../components/Input/Input.tsx";
-import {Button} from "../components/button/button.tsx"
-
+import { Button } from "../components/button/button.tsx";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -67,7 +66,9 @@ export default function LoginForm() {
         placeholder="••••••••"
       />
 
-      <Button type="submit" buttonType="primary" disabled={loading}>{loading ? "Signing in..." : "Sign In"}</Button>
+      <Button type="submit" buttonType="primary" disabled={loading}>
+        {loading ? "Signing in..." : "Sign In"}
+      </Button>
     </form>
   );
 }
