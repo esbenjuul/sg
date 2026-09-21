@@ -1,6 +1,190 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --primary: #1f4386;
+  --primary-dark: color-mix(in srgb, var(--primary) 80%, black);
+  --primary-light: color-mix(in srgb, var(--primary) 70%, white);
+  --color-font-primary: #1a2318;
+  --color-font-primary-inverted: #ffffff;
+  --color-font-primary-inverted-alpha: color-mix(
+    in oklab,
+    var(--color-font-primary-inverted) 60%,
+    transparent
+  );
+  --color-icon-contrast: #e5e5ff;
+  --font-weight-medium: 600;
+  --font-weight-normal: 400;
+
+  --accent: #73a7b8;
+  --accent-dark: #1d3557;
+  --bg-main: #f5f4f0;
+  --bg-card: #ffffff;
+  --text-primary: #1d3557;
+  --text-secondary: #457b9d;
+  --text-light: #6c757d;
+  --border: #dee2e6;
+  --success: #2a9d8f;
+  --error: #e63946;
+  --error-bg: #fef2f2;
+  --shadow: 0 2px 4px rgba(29, 53, 87, 0.08);
+  --shadow-lg: 0 8px 16px rgba(29, 53, 87, 0.12);
+  --spacing: 0.25rem;
+  --color-border: #d3d3d3;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+}
+
+:root {
+  /* ==========================================
+     🎨 PRIMITIVE TOKENS (Selve farvepaletten)
+     ========================================== */
+
+  /* Brand Farver */
+  --color-brand-blue: #1f4386;
+  --color-brand-red: #e13133;
+  /* Blå brand-toner (Primær) */
+  --color-brand-blue-50: #ebf1fa; /* Meget lys blå – perfekt til infobokse */
+  --color-brand-blue-100: #d2e0f4; /* Lys blå – god til hover eller badges */
+  --color-brand-blue-200: color-mix(
+    in srgb,
+    var(--color-brand-blue) 60%,
+    white
+  ); /* Middelblå – god til knapper og links */
+  --color-brand-blue-300: color-mix(
+    in srgb,
+    var(--color-brand-blue) 80%,
+    white
+  ); /* Middelblå – god til knapper og links */
+  --color-brand-blue-400: #1f4386; /* Primær blå – god til knapper og links */
+  --color-brand-blue-500: color-mix(
+    in srgb,
+    var(--color-brand-blue) 90%,
+    black
+  );
+  --color-brand-blue-600: color-mix(
+    in srgb,
+    var(--color-brand-blue) 80%,
+    black
+  ); /* Primær blå – god til knapper og links */
+  --color-brand-blue-900: #10254c; /* Meget mørk blå – god til mørkt tema */
+
+  /* Røde brand-toner (Sekundær) */
+  --color-brand-red-50: #fceaea; /* Meget lys rød – perfekt til advarselsbokse */
+  --color-brand-red-100: #f7c9ca; /* Lys rød – god til badges eller slet-knap hover */
+  --color-brand-red-900: #4a0a0b; /* Meget mørk rød – god til mørkt tema */
+
+  /* Gråtoner & Mørke nuancer */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-600: #4b5563;
+
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-gray-950: #0b0f19; /* Ekstra dyb mørkeblå/grå til mørk baggrund */
+
+  /* System- & Statusfarver */
+  --color-system-success: #10b981;
+  --color-system-warning: #f59e0b;
+  --color-system-info: #3b82f6;
+
+  /* Statiske farver */
+  --color-static-white: #ffffff;
+  /* ==========================================
+       🖋 TYPOGRAFI & TEKSTSTØRRELSER
+       ========================================== */
+  --text-size-base: 1rem;
+  --text-size-md: calc(14 / 16 * 1rem);
+  --text-size-sm: calc(12 / 16 * 1rem);
+  --text-size-lg: calc(24 / 16 * 1rem);
+
+  /* ==========================================
+     ☀️ SEMANTIC TOKENS - LYST TEMA (Standard)
+     ========================================== */
+  --bg-page-main: var(--color-gray-100);
+  --bg-card-surface: var(--color-static-white);
+  --bg-navigation-sidebar: var(--color-gray-900);
+  --bg-navigation-item-active: var(--color-brand-blue);
+  --border-subtle: var(--color-gray-200);
+
+  /* Brand-tonede overflader (Lyst tema) */
+  --bg-surface-blue-subtle: var(--color-brand-blue-50);
+  --bg-surface-red-subtle: var(--color-brand-red-50);
+
+  /* Interaktive elementer / Knapper */
+  --bg-button-primary: var(--color-brand-blue);
+  --bg-button-primary-hover: #163266;
+  --bg-button-primary-nav: var(--color-brand-blue-300);
+  --bg-button-primary-nav-hover: var(--color-brand-blue-500);
+  --bg-button-primary-nav-active: var(--color-brand-blue-600);
+  --bg-button-action: var(--color-brand-red);
+  --bg-button-action-hover: #b82224;
+
+  /* Tekst & Typografi */
+  --text-primary: var(--color-gray-800);
+  --text-muted: var(--color-gray-600);
+  --text-high-contrast: var(--color-static-white);
+  --text-brand-link: var(--color-brand-blue);
+  --text-surface-blue-subtle: var(
+    --color-brand-blue
+  ); /* Tekstfarve der matcher blue subtle */
+  --text-surface-red-subtle: var(
+    --color-brand-red
+  ); /* Tekstfarve der matcher */
+
+  /* Hold- & Kampstatusser */
+  --status-success: var(--color-system-success);
+  --status-warning: var(--color-system-warning);
+  --status-info: var(--color-system-info);
+}
+
+/* ==========================================
+   🌙 SEMANTIC TOKENS - MØRKT TEMA
+   ========================================== */
+body.dark, [data-theme="dark"] {
+  --bg-page-main: var(--color-gray-950); /* Super mørk dashboard-bund */
+  --bg-card-surface: var(--color-gray-900); /* Mørke datakort og tabeller */
+  --bg-navigation-sidebar: var(
+    --color-gray-950
+  ); /* Endnu mørkere eller matchende menu */
+  --bg-navigation-item-active: var(--color-brand-blue);
+  --border-subtle: var(--color-gray-800); /* Mørke, diskrete skillelinjer */
+
+  /* Brand-tonede overflader (Mørkt tema) */
+  --bg-surface-blue-subtle: var(--color-brand-blue-900);
+  --text-surface-blue-subtle: #93b4ed; /* Lysere blå tekst for læsbarhed på mørk bund */
+
+  --bg-surface-red-subtle: var(--color-brand-red-900);
+  --text-surface-red-subtle: #f79495; /* Lysere rød tekst for læsbarhed på mørk bund */
+
+  /* Interaktive elementer / Knapper */
+  --bg-button-primary: var(--color-brand-blue);
+  --bg-button-primary-hover: #2a56a6; /* Lidt lysere blå til hover i mørke */
+  --bg-button-action: var(--color-brand-red);
+  --bg-button-action-hover: #f04446; /* Lidt lysere rød til hover i mørke */
+
+  /* Tekst & Typografi */
+  --text-primary: var(
+    --color-gray-50
+  ); /* Næsten helt hvid tekst for høj kontrast */
+  --text-muted: var(--color-gray-500); /* Dæmpet tekst til detaljer */
+  --text-on-dark: var(--color-static-white);
+  --text-brand-link: #4f7cd1; /* En lysere, mere læsbar blå på mørk bund */
+
+  /* Statusser bevarer deres farver, da de lyser flot op på mørk baggrund */
+  --status-success: var(--color-system-success);
+  --status-warning: var(--color-system-warning);
+  --status-info: var(--color-system-info);
+}
+
+/* 
+:root {
   --font-size: 16px;
   --background: #f5f4f0;
   --foreground: #1a2318;
@@ -76,7 +260,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
-}
+} */
 
 @theme inline {
   --color-background: var(--background);
@@ -129,17 +313,13 @@
   }
 
   /**
-  * Default typography styles for HTML elements (h1-h4, p, label, button, input).
-  * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
-  */
+   * Default typography styles for HTML elements (h1-h4, p, label, button, input).
+   * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
+   */
 
   html {
     font-size: var(--font-size);
-    font-family: 'Inter', system-ui, sans-serif;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Nunito', system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
   }
 
   h1 {

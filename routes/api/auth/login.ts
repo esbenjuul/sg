@@ -3,7 +3,7 @@ import {
   findUserByEmail,
   sanitizeUser,
   verifyPassword,
-} from "../../../models/user/user.ts";
+} from "@/models/user/index.ts";
 import {
   createSessionExpiry,
   createSessionToken,

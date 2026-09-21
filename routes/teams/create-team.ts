@@ -1,6 +1,7 @@
 import { HttpError } from "fresh";
-import { createTeam } from "@/models/team/team.ts";
-import { findUserById } from "@/models/user/user.ts";
+import { ConflictError } from "@/models/errors.ts";
+import { createTeam } from "@/models/team/index.ts";
+import { findUserById } from "@/models/user/index.ts";
 
 export interface CreateTeamDeps {
   createTeam: typeof createTeam;
@@ -48,7 +49,7 @@ export async function handleCreateTeam(
       image: image || undefined,
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "Team already exists") {
+    if (error instanceof ConflictError) {
       throw new HttpError(400, "A team with this name already exists");
     }
     throw error;

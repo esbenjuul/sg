@@ -2,18 +2,34 @@ import { define } from "../../utils/state.ts";
 import { Input } from "@/components/Input/Input.tsx";
 import { Button, Card, Select } from "@/components/index.ts";
 import DesignDialog from "@/islands/DesignDialog.tsx";
-import { PlusIcon } from "@/components/icons/PlusIcon.tsx";
-import { ImportIcon } from "@/components/icons/ImportIcon.tsx";
-import { DotsIcon } from "@/components/icons/DotsIcon.tsx";
-import { ArrowLeftIcon } from "@/components/icons/ArrowLeftIcon.tsx";
-import { PencilIcon } from "@/components/icons/Pencilicon.tsx";
+import {
+  ArrowLeftIcon,
+  CloseIcon,
+  DotsIcon,
+  ImportIcon,
+  LocationIcon,
+  LogoIcon,
+  OverviewIcon,
+  PencilIcon,
+  PlusIcon,
+  TutorIcon,
+  UsersIcon,
+} from "@/components/icons/index.ts";
+import LogoutIcon from "../../components/icons/LogoutIcon.tsx";
 
 const icons = [
-  { name: "PlusIcon", Icon: PlusIcon },
-  { name: "ImportIcon", Icon: ImportIcon },
-  { name: "DotsIcon", Icon: DotsIcon },
   { name: "ArrowLeftIcon", Icon: ArrowLeftIcon },
+  { name: "CloseIcon", Icon: CloseIcon },
+  { name: "DotsIcon", Icon: DotsIcon },
+  { name: "ImportIcon", Icon: ImportIcon },
+  { name: "LocationIcon", Icon: LocationIcon },
+  { name: "LogoIcon", Icon: LogoIcon },
+  { name: "OverviewIcon", Icon: OverviewIcon },
   { name: "PencilIcon", Icon: PencilIcon },
+  { name: "PlusIcon", Icon: PlusIcon },
+  { name: "TutorIcon", Icon: TutorIcon },
+  { name: "UsersIcon", Icon: UsersIcon },
+  { name: "LogoutIcon", Icon: LogoutIcon },
 ];
 
 export default define.page<void>(function Design() {

@@ -1,8 +1,8 @@
 import { define } from "@/utils/state.ts";
 import { HttpError, page } from "fresh";
 import Card from "@/components/card/card.tsx";
-import { getTeams } from "@/models/team/team.ts";
-import { getUsers } from "@/models/user/user.ts";
+import { getTeams } from "@/models/team/index.ts";
+import { getUsers } from "@/models/user/index.ts";
 import AddTeamDialog, {
   type TeamUserOption,
 } from "@/islands/AddTeamDialog.tsx";
@@ -26,9 +26,7 @@ export const handler = define.handlers({
     try {
       const [teams, users] = await Promise.all([getTeams(), getUsers()]);
       const userById = new Map(
-        (users ?? [])
-          .filter((user) => user._id)
-          .map((user) => [user._id!.toString(), user]),
+        users.map((user) => [user._id, user]),
       );
 
       const teamCards: TeamCardData[] = teams.map((team) => {
@@ -43,13 +41,11 @@ export const handler = define.handlers({
         };
       });
 
-      const userOptions: TeamUserOption[] = (users ?? [])
-        .filter((user) => user._id)
-        .map((user) => ({
-          id: user._id!.toString(),
-          name: user.name,
-          email: user.email,
-        }));
+      const userOptions: TeamUserOption[] = users.map((user) => ({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      }));
 
       return page({ teams: teamCards, users: userOptions });
     } catch (err) {

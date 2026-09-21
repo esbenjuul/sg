@@ -1,6 +1,6 @@
 import type { Context } from "fresh";
 import { verifySessionToken } from "../utils/session.ts";
-import { findUserById, UserRole } from "../models/user/user.ts";
+import { findUserById, type UserRole } from "../models/user/index.ts";
 
 export interface AuthState {
   user?: {

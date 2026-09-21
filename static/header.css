@@ -1,5 +1,4 @@
 .main-header {
-
   .logo {
     width: 60px;
   }
@@ -7,51 +6,85 @@
     list-style: none;
     display: flex;
     gap: 1rem;
-    
+  }
+  .logo-avatar {
+    border-radius: 50%;
+    display: flex;
+
     a {
-     color: var(--text-primary);
-     text-decoration: none;
-     color: blue;
+      color: var(--color-icon-contrast);
     }
-   
-    
+    svg {
+      width: auto;
+      height: 45px;
+    }
+    > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 0.5rem;
+      h1 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-high-contrast);
+        letter-spacing: -0.02em;
+      }
+      span {
+        font-size: 1rem;
+        color: color-mix(in srgb, var(--text-high-contrast) 80%, transparent);
+      }
+    }
   }
   /* Navigation */
-nav {
-  background: var(--bg-card);
-  box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 100; 
+  nav {
+    background: var(--primary);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav .nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 5rem;
+  }
+
+  nav .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  nav .user-info {
+    color: var(--text-high-contrast);
+    font-weight: 500;
+    font-size: 0.938rem;
+  }
 }
 
-nav .nav-content {
+.nav-link {
+  padding: calc(var(--spacing) * 2) calc(var(--spacing) * 3);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: 5rem;
-}
+  color: var(--color-font-primary-inverted);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-size-sm);
+  transition: color 0.2s, background-color 0.2s;
+  border-radius: var(--spacing);
+  line-height: 1rem;
 
-nav h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+  &:hover {
+    background-color: var(--bg-button-primary-nav-hover);
+  }
+  > .icon {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+  }
+  &.active {
+    background-color: var(--bg-button-primary-nav-active);
+  }
 }
-
-nav .nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-nav .user-info {
-  color: var(--text-secondary);
-  font-weight: 500;
-  font-size: 0.938rem;
-}
-  
-}
-
-

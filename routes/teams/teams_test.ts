@@ -1,3 +1,4 @@
+import { ConflictError } from "@/models/errors.ts";
 import {
   assertEquals,
   assertRejects,
@@ -88,7 +89,7 @@ Deno.test("handleCreateTeam throws HttpError 400 on duplicate team", async () =>
   const deps: CreateTeamDeps = {
     findUserById: async () => null,
     createTeam: async () => {
-      throw new Error("Team already exists");
+      throw new ConflictError("Team already exists");
     },
   };
 

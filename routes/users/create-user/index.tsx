@@ -2,7 +2,8 @@ import { HttpError } from "fresh";
 import { define } from "@/utils/state.ts";
 import { Input } from "@/components/Input/Input.tsx";
 import { Button } from "@/components/button/button.tsx";
-import { createUser } from "@/models/user/user.ts";
+import { ConflictError } from "@/models/errors.ts";
+import { createUser } from "@/models/user/index.ts";
 
 export interface CreateUserDeps {
   createUser: typeof createUser;
@@ -22,13 +23,20 @@ export async function handleCreateUser(
     throw new HttpError(400, "Name, email and password are required");
   }
 
-  await deps.createUser({
-    name,
-    email,
-    password,
-    mobile: mobile || undefined,
-    birthday: birthday || undefined,
-  });
+  try {
+    await deps.createUser({
+      name,
+      email,
+      password,
+      mobile: mobile || undefined,
+      birthday: birthday || undefined,
+    });
+  } catch (error) {
+    if (error instanceof ConflictError) {
+      throw new HttpError(409, "User already exists");
+    }
+    throw error;
+  }
 
   return new Response(null, {
     status: 303,

@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, type Document } from "mongodb";
 
 const MONGODB_URI = Deno.env.get("MONGODB_URI") ||
   "mongodb://admin:password123@localhost:27017";
@@ -27,6 +27,11 @@ export async function getDatabase() {
     return await connectToDatabase();
   }
   return client.database(MONGODB_DB);
+}
+
+export async function getCollection<T extends Document>(name: string) {
+  const db = await getDatabase();
+  return db.collection<T>(name);
 }
 
 export async function closeDatabase() {

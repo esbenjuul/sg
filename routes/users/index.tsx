@@ -1,9 +1,9 @@
 import { HttpError, page } from "fresh";
 import {
-  ConventusUser,
+  type ConventusUser,
   getUsers,
   importUsers,
-} from "../../models/user/user.ts";
+} from "@/models/user/index.ts";
 import { define } from "@/utils/state.ts";
 import { PlusIcon } from "@/components/icons/PlusIcon.tsx";
 import neatCsv from "neat-csv";

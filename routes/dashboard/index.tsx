@@ -1,8 +1,15 @@
 import { define } from "../../utils/state.ts";
-//import '../../components/layouts/header.css';
 import { sendMail } from "../../utils/mailjet.ts";
+import { StatCard } from "../../components/statcard/StatCard.tsx";
+import { UsersIcon } from "../../components/icons/UsersIcon.tsx";
+import { page } from "fresh";
+import { getNumberOfTeams } from "@/models/team/index.ts";
 
 export const handler = define.handlers({
+  async GET(ctx) {
+    const numberOfTeams = await getNumberOfTeams();
+    return page({ numberOfTeams });
+  },
   async POST(ctx) {
     const form = await ctx.req.formData();
     const mailForm = form.get("mail");
@@ -17,12 +24,36 @@ export const handler = define.handlers({
 
 export default define.page<void>(function DashboardPage(ctx) {
   const { user } = ctx.state;
-
+  const { numberOfTeams } = ctx.data;
   return (
     <>
-      <section class="container content-box">
+      <article class="container">
+        <header>
+          <h1>Velkommen tilbage</h1>
+          <span>Her er et overblik og foreningens hold og aktiviteter</span>
+        </header>
+
+        <section class="teaser-section spacer">
+          <StatCard
+            trumpet="Aktive hold"
+            value={numberOfTeams.toString()}
+            manchet="1 under oprettelse"
+            color="--color-system-success"
+            icon={<UsersIcon />}
+          >
+          </StatCard>
+          <StatCard
+            color="--color-brand-red"
+            icon={<UsersIcon />}
+            trumpet="Quick Stats"
+            value={numberOfTeams.toString()}
+            manchet="Your dashboard statistics will appear here. Add your own data and features!"
+          >
+          </StatCard>
+        </section>
+
         <div class="dashboard-header">
-          <h2>Dashboard</h2>
+          <h2>Dashboard ds</h2>
 
           <div class="profile-section">
             <h3>Your Profile</h3>
@@ -85,7 +116,7 @@ export default define.page<void>(function DashboardPage(ctx) {
             features, store user data in MongoDB, and build your application!
           </p>
         </div>
-      </section>
+      </article>
       <form name="mail" method="POST">
         <button>Send mail</button>
       </form>

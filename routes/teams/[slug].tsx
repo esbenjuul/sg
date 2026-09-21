@@ -1,7 +1,7 @@
 import { HttpError, page } from "fresh";
 import { define } from "@/utils/state.ts";
-import { getTeamBySlug } from "@/models/team/team.ts";
-import { findUserById } from "@/models/user/user.ts";
+import { getTeamBySlug } from "@/models/team/index.ts";
+import { findUserById } from "@/models/user/index.ts";
 
 interface TeamDetailsData {
   name: string;

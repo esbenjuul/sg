@@ -1,5 +1,6 @@
 import type { Context } from "fresh";
-import { createUser, sanitizeUser } from "../../../models/user/user.ts";
+import { ConflictError } from "@/models/errors.ts";
+import { createUser } from "@/models/user/index.ts";
 import {
   createSessionExpiry,
   createSessionToken,
@@ -8,12 +9,6 @@ import { define } from "../../../utils/state.ts";
 
 import { AuthState } from "../../../middleware/auth.ts";
 import { sendMail } from "../../../utils/mailersend.ts";
-
-interface SignupRequest {
-  email: string;
-  password: string;
-  name: string;
-}
 
 export const handler = define.handlers({
   async POST(ctx: Context<AuthState>) {
@@ -42,15 +37,7 @@ export const handler = define.handlers({
         );
       }
 
-      // Create user
-      const user = await createUser(email, password, name);
-
-      if (!user) {
-        return new Response(
-          JSON.stringify({ error: "Failed to create user" }),
-          { status: 500, headers: { "Content-Type": "application/json" } },
-        );
-      }
+      const user = await createUser({ email, password, name });
 
       // Create session
       const sessionData = {
@@ -82,7 +69,7 @@ export const handler = define.handlers({
     } catch (error) {
       console.error("Signup error:", error);
 
-      if (error instanceof Error && error.message === "User already exists") {
+      if (error instanceof ConflictError) {
         return new Response(JSON.stringify({ error: "User already exists" }), {
           status: 409,
           headers: { "Content-Type": "application/json" },
