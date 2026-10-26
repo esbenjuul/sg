@@ -71,7 +71,7 @@
   color: var(--color-font-primary-inverted);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
-  font-size: var(--text-size-sm);
+  font-size: var(--text-size-md);
   transition: color 0.2s, background-color 0.2s;
   border-radius: var(--spacing);
   line-height: 1rem;

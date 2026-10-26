@@ -1,0 +1,14 @@
+{
+  "name": "sg",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "devDependencies": {
+    "@storybook/preact-vite": "^10.6.1",
+    "@storybook/react-dom-shim": "^10.6.1",
+    "storybook": "^10.6.1"
+  }
+}

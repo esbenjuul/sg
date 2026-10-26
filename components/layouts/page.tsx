@@ -9,8 +9,9 @@ import {
 import LogoutIcon from "../icons/LogoutIcon.tsx";
 
 export function PageLayout(ctx: Context<AuthState>) {
-  const { Component, state } = ctx;
+  const { Component, state, route } = ctx;
   // Redirect if not logged in
+  console.log("PageLayout state:", ctx);
   if (!state.user) {
     return new Response(null, {
       status: 302,
@@ -73,6 +74,7 @@ export function PageLayout(ctx: Context<AuthState>) {
       </header>
 
       <main>
+        {route}
         <Component />
       </main>
     </>
