@@ -1,7 +1,14 @@
 import { ObjectId } from "mongodb";
+import type * as v from "valibot";
+import type {
+  UserRole as UserRoleSchema,
+  UserStatus as UserStatusSchema,
+} from "@/api/contracts/shared.ts";
 
-export type UserRole = "admin" | "teamlead" | "member" | "trainer" | "reader";
-export type UserStatus = "active" | "inactive" | "authenticate_wait";
+// Derived from the valibot schemas so the allowed values live in one place.
+// Type-only import: no runtime dependency from models on the api layer.
+export type UserRole = v.InferOutput<typeof UserRoleSchema>;
+export type UserStatus = v.InferOutput<typeof UserStatusSchema>;
 
 export type ConventusUser = {
   afdeling: string;

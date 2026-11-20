@@ -1,8 +1,23 @@
+import type * as v from "valibot";
 import { updateUser as updateUserContract } from "@/api/contracts/user.ts";
 import type { UserProfile as UserProfileDto } from "@/api/contracts/user.ts";
 import { ApiError, handle } from "@/api/server.ts";
-import { updateUser, type UserProfile } from "@/models/user/index.ts";
+import { assertType, type Equals } from "@/api/type-check.ts";
+import {
+  updateUser,
+  type UpdateUserInput,
+  type UserProfile,
+} from "@/models/user/index.ts";
 import { define, type State } from "@/utils/state.ts";
+
+// The contract's fields (minus the path param) must match what the model
+// accepts exactly, so adding/removing a field on one side fails `deno check`.
+assertType<
+  Equals<
+    Omit<v.InferOutput<typeof updateUserContract.input>, "id">,
+    UpdateUserInput
+  >
+>();
 
 export interface UpdateUserDeps {
   updateUser: typeof updateUser;
