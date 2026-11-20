@@ -48,7 +48,8 @@ export function handle<E extends Endpoint, S>(
   return async (ctx) => {
     let raw: unknown;
     try {
-      raw = await readInput(contract, ctx.req);
+      // Path params (e.g. `:id` from routes/api/users/[id].ts) override the body.
+      raw = { ...(await readInput(contract, ctx.req)), ...ctx.params };
     } catch {
       return errorResponse(400, {
         code: "bad_request",
@@ -75,13 +76,20 @@ export function handle<E extends Endpoint, S>(
   };
 }
 
-async function readInput(contract: Endpoint, req: Request): Promise<unknown> {
+async function readInput(
+  contract: Endpoint,
+  req: Request,
+): Promise<Record<string, unknown>> {
   if (contract.method === "GET" || contract.method === "DELETE") {
     return Object.fromEntries(new URL(req.url).searchParams);
   }
   const type = req.headers.get("content-type") ?? "";
   if (type.includes("application/json")) {
-    return await req.json();
+    const body = await req.json();
+    if (typeof body !== "object" || body === null || Array.isArray(body)) {
+      throw new Error("Expected a JSON object");
+    }
+    return body;
   }
   // Plain <form> posts / curl -F still work.
   const form = await req.formData();

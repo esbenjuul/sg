@@ -35,6 +35,10 @@ Rules:
   anything else → 500.
 - Every error response is `{ error: { code, message, fields? } }`.
 - `fetchApi()` validates input before fetching and never throws.
+- Path params are declared as `:name` in the contract path (e.g.
+  `/api/users/:id` ↔ `routes/api/users/[id].ts`) and are part of the input
+  schema. `fetchApi()` fills them into the URL; `handle()` merges `ctx.params`
+  into the input, overriding any body value of the same name.
 - Plain page-route form posts (e.g. `routes/teams`) stay as they are; the
   contract layer is for islands that need data without a page reload.
 

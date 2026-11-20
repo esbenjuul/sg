@@ -32,3 +32,16 @@ export async function findAll(): Promise<UserDetails[]> {
   const usersList = await collection.find();
   return usersList.map((user) => ({ ...user }));
 }
+
+/** Applies `$set` to one user. Returns false if no user matched. */
+export async function updateById(
+  id: string,
+  set: Partial<Omit<UserDetails, "_id" | "password" | "createdAt">>,
+): Promise<boolean> {
+  const collection = await users();
+  const result = await collection.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: set },
+  );
+  return result.matchedCount > 0;
+}

@@ -70,3 +70,20 @@ export function validationError(
     fields: flat.nested as Record<string, string[]> | undefined,
   };
 }
+
+/**
+ * Fills `:param` segments of `path` from `input`. Returns the URL path and the
+ * remaining input (params removed) to send as body or query string.
+ */
+export function fillPath(
+  path: string,
+  input: Record<string, unknown>,
+): { path: string; rest: Record<string, unknown> } {
+  const rest = { ...input };
+  const filled = path.replace(/:(\w+)/g, (_, name: string) => {
+    const value = rest[name];
+    delete rest[name];
+    return encodeURIComponent(String(value ?? ""));
+  });
+  return { path: filled, rest };
+}

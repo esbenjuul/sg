@@ -1,11 +1,13 @@
 import * as bcrypt from "bcrypt";
-import { ConflictError } from "../errors.ts";
+import { ConflictError, NotFoundError } from "../errors.ts";
 import * as repository from "./repository.ts";
 import type {
   ConventusUser,
   CreateUserInput,
   ImportResponse,
+  UpdateUserInput,
   UserDetails,
+  UserProfile,
   UserResponse,
 } from "./types.ts";
 
@@ -109,4 +111,48 @@ export async function importUsers(
   }
 
   return { numberOfDublicates, numberOfImports };
+}
+
+export function toUserProfile(user: UserDetails): UserProfile {
+  return {
+    ...sanitizeUser(user),
+    mobile: user.mobile,
+    birthday: user.birthday,
+    conventusId: user.conventusId,
+    status: user.status,
+  };
+}
+
+/**
+ * Updates the given fields on a user. Authorization (who may change what)
+ * is the caller's job.
+ *
+ * @throws NotFoundError if the user doesn't exist
+ * @throws ConflictError if the new email belongs to another user
+ */
+export async function updateUser(
+  id: string,
+  input: UpdateUserInput,
+): Promise<UserProfile> {
+  if (input.email) {
+    const owner = await repository.findByEmail(input.email);
+    if (owner && owner._id!.toString() !== id) {
+      throw new ConflictError("Email is already in use");
+    }
+  }
+
+  // Drop undefined keys so they don't overwrite stored values.
+  const set = Object.fromEntries(
+    Object.entries(input).filter(([, value]) => value !== undefined),
+  ) as UpdateUserInput;
+
+  const found = await repository.updateById(id, {
+    ...set,
+    updatedAt: new Date(),
+  });
+  if (!found) throw new NotFoundError("User not found");
+
+  const updated = await repository.findById(id);
+  if (!updated) throw new NotFoundError("User not found");
+  return toUserProfile(updated);
 }

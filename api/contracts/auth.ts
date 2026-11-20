@@ -1,22 +1,15 @@
 import * as v from "valibot";
 import { endpoint } from "../contract.ts";
+import { Email, UserRole } from "./shared.ts";
 
 /** Wire DTO for the signed-in user. Plain JSON types only — no ObjectId/Date. */
 export const AuthUser = v.object({
   id: v.string(),
   email: v.string(),
   name: v.string(),
-  role: v.picklist(["admin", "teamlead", "member", "trainer", "reader"]),
+  role: UserRole,
 });
 export type AuthUser = v.InferOutput<typeof AuthUser>;
-
-const Email = v.pipe(
-  v.string(),
-  v.trim(),
-  v.toLowerCase(),
-  v.nonEmpty("Email is required"),
-  v.email("Enter a valid email address"),
-);
 
 const AuthSuccess = v.object({ user: AuthUser });
 

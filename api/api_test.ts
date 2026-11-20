@@ -3,6 +3,7 @@ import type { Context } from "fresh";
 import { ConflictError } from "@/models/errors.ts";
 import { fetchApi } from "./client.ts";
 import { signup } from "./contracts/auth.ts";
+import { updateUser } from "./contracts/user.ts";
 import { ApiError, handle } from "./server.ts";
 
 const fakeCtx = (req: Request) => ({ req }) as unknown as Context<unknown>;
@@ -127,6 +128,32 @@ Deno.test("fetchApi: round-trips through handle()", async () => {
   try {
     const res = await fetchApi(signup, valid);
     assertEquals(res, { ok: true, data: { user: okUser } });
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});
+
+Deno.test("fetchApi: fills path params and leaves them out of the body", async () => {
+  const realFetch = globalThis.fetch;
+  let seen: { url: string; method?: string; body: unknown } | undefined;
+  globalThis.fetch = (url, init) => {
+    seen = {
+      url: String(url),
+      method: init?.method,
+      body: JSON.parse(String(init?.body)),
+    };
+    return Promise.resolve(Response.json({ user: {} }));
+  };
+  try {
+    await fetchApi(updateUser, {
+      id: "507f1f77bcf86cd799439011",
+      name: "Ada",
+    });
+    assertEquals(seen, {
+      url: "/api/users/507f1f77bcf86cd799439011",
+      method: "PATCH",
+      body: { name: "Ada" },
+    });
   } finally {
     globalThis.fetch = realFetch;
   }

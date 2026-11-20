@@ -6,6 +6,7 @@ import {
   type ApiErrorBody,
   type ApiResult,
   type Endpoint,
+  fillPath,
   type InputOf,
   type OutputOf,
   validationError,
@@ -27,9 +28,12 @@ export async function fetchApi<E extends Endpoint>(
   }
 
   const hasQuery = contract.method === "GET" || contract.method === "DELETE";
-  const url = hasQuery
-    ? `${contract.path}?${new URLSearchParams(input as Record<string, string>)}`
-    : contract.path;
+  const { path, rest } = fillPath(
+    contract.path,
+    input as Record<string, unknown>,
+  );
+  const query = new URLSearchParams(rest as Record<string, string>).toString();
+  const url = hasQuery && query ? `${path}?${query}` : path;
 
   let res: Response;
   try {
@@ -37,7 +41,7 @@ export async function fetchApi<E extends Endpoint>(
       method: contract.method,
       headers: hasQuery ? undefined : { "Content-Type": "application/json" },
       // Send the raw input; the server re-validates and applies transforms.
-      body: hasQuery ? undefined : JSON.stringify(input),
+      body: hasQuery ? undefined : JSON.stringify(rest),
       signal: init.signal,
     });
   } catch {

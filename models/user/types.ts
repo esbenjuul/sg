@@ -56,3 +56,21 @@ export interface CreateUserInput {
   birthday?: string;
   status?: UserStatus;
 }
+
+/** Full user profile without credentials. */
+export interface UserProfile extends UserResponse {
+  mobile?: string;
+  birthday?: string;
+  conventusId?: string;
+  status?: UserStatus;
+}
+
+/** Fields that can be changed on an existing user. Omitted = unchanged. */
+export interface UpdateUserInput {
+  name?: string;
+  email?: string;
+  mobile?: string;
+  birthday?: string;
+  role?: UserRole;
+  status?: UserStatus;
+}
