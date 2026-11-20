@@ -87,3 +87,20 @@ export async function verifySessionToken(
 export function createSessionExpiry(daysFromNow = 7): number {
   return Date.now() + daysFromNow * 24 * 60 * 60 * 1000;
 }
+
+const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
+
+/** Creates a session token and adds the session cookie to `headers`. */
+export async function startSession(
+  user: { userId: string; email: string; name: string },
+  headers: Headers,
+): Promise<void> {
+  const token = await createSessionToken({
+    ...user,
+    expiresAt: createSessionExpiry(),
+  });
+  headers.append(
+    "Set-Cookie",
+    `session=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${SESSION_MAX_AGE_SECONDS}`,
+  );
+}

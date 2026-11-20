@@ -29,8 +29,10 @@ export function Input(props) {
       props.onInput(e);
     }
   };
+  // An explicit `error` prop (e.g. from an API response) wins over native validity.
+  const hint = props.error || (!valid ? message : "");
   return (
-    <div className={`form-field ${valid ? "" : "invalid"}`}>
+    <div className={`form-field ${hint ? "invalid" : ""}`}>
       <label htmlFor={props.id}>{props.label}</label>
       <input
         type={props.type}
@@ -43,7 +45,7 @@ export function Input(props) {
         required={props.required}
         ref={inputRef}
       />
-      {!valid && <p class="form-hint">{message}</p>}
+      {hint && <p class="form-hint">{hint}</p>}
     </div>
   );
 }

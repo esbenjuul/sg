@@ -13,3 +13,4 @@ ADRs document significant technical choices for this project.
 | Number | Title | Status |
 |--------|-------|--------|
 | [0001](./0001-per-module-models-facade.md) | Per-module models facade | Accepted |
+| [0002](./0002-typed-api-contracts.md) | Typed API contracts between islands and `routes/api` | Proposed |

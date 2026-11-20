@@ -1,61 +1,41 @@
 import { useState } from "preact/hooks";
+import { fetchApi, formToObject } from "@/api/client.ts";
+import { signup } from "@/api/contracts/auth.ts";
+import type { ApiErrorBody, InputOf } from "@/api/contract.ts";
 import { Input } from "../components/Input/Input.tsx";
 
 export default function SignupForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordTwo, setPasswordTwo] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ApiErrorBody["error"] | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setLoading(true);
-    console.log(e);
-    // Validate password length
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+
+    // Password length + match rules come from the contract, so they run here
+    // first and again on the server.
+    const res = await fetchApi(
+      signup,
+      formToObject(e.currentTarget as HTMLFormElement) as InputOf<
+        typeof signup
+      >,
+    );
+
+    if (!res.ok) {
+      setError(res.error);
       setLoading(false);
       return;
     }
-    if (password !== passwordTwo) {
-      setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-    console.log(e.target);
-    const body = new FormData(e.target as HTMLFormElement);
-    console.log(body.keys());
-    try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        body,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || "Signup failed");
-        setLoading(false);
-        return;
-      }
-
-      // Redirect to dashboard on success
-      window.location.href = "/dashboard";
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-      setLoading(false);
-    }
+    globalThis.location.href = "/dashboard";
   };
 
+  const field = (name: string) => error?.fields?.[name]?.[0];
+
   return (
-    <form method="post" onSubmit={handleSubmit}>
-      {error && (
-        <div class="error-message">
-          {error}
-        </div>
+    <form method="post" onSubmit={handleSubmit} noValidate>
+      {error && !error.fields && (
+        <div class="error-message">{error.message}</div>
       )}
 
       <Input
@@ -63,21 +43,19 @@ export default function SignupForm() {
         id="name"
         name="name"
         label="Full Name"
-        onInput={(e) => setName((e.target as HTMLInputElement).value)}
         placeholder="John Doe"
-        minLength={6}
         required
-      >
-      </Input>
+        error={field("name")}
+      />
 
       <Input
         type="email"
         id="email"
         name="email"
         label="Email Address"
-        onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
         required
         placeholder="you@example.com"
+        error={field("email")}
       />
 
       <Input
@@ -85,21 +63,19 @@ export default function SignupForm() {
         id="password"
         name="password"
         label="Password"
-        onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
         required
-        minLength={6}
         placeholder="••••••••"
+        error={field("password")}
       />
 
       <Input
         type="password"
-        id="password-two"
-        name="passwordtwo"
+        id="password-confirm"
+        name="passwordConfirm"
         label="Confirm Password"
-        onInput={(e) => setPasswordTwo((e.target as HTMLInputElement).value)}
         required
-        minLength={6}
         placeholder="••••••••"
+        error={field("passwordConfirm")}
       />
 
       <button

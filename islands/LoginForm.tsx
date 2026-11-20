@@ -1,47 +1,38 @@
 import { useState } from "preact/hooks";
+import { fetchApi, formToObject } from "@/api/client.ts";
+import { login } from "@/api/contracts/auth.ts";
+import type { ApiErrorBody, InputOf } from "@/api/contract.ts";
 import { Input } from "../components/Input/Input.tsx";
 import { Button } from "../components/button/button.tsx";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ApiErrorBody["error"] | null>(null);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: Event) => {
     e.preventDefault();
-    setError("");
+    setError(null);
     setLoading(true);
-    const body = new FormData(e.target as HTMLFormElement);
 
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        body,
-      });
+    const res = await fetchApi(
+      login,
+      formToObject(e.currentTarget as HTMLFormElement) as InputOf<typeof login>,
+    );
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || "Login failed");
-        setLoading(false);
-        return;
-      }
-
-      // Redirect to dashboard on success
-      window.location.href = "/dashboard";
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+    if (!res.ok) {
+      setError(res.error);
       setLoading(false);
+      return;
     }
+    globalThis.location.href = "/dashboard";
   };
 
+  const field = (name: string) => error?.fields?.[name]?.[0];
+
   return (
-    <form onSubmit={handleSubmit}>
-      {error && (
-        <div class="error-message">
-          {error}
-        </div>
+    <form onSubmit={handleSubmit} noValidate>
+      {error && !error.fields && (
+        <div class="error-message">{error.message}</div>
       )}
 
       <Input
@@ -49,10 +40,9 @@ export default function LoginForm() {
         id="email"
         label="Email Address"
         name="email"
-        value={email}
-        onInput={(e) => setEmail((e.target as HTMLInputElement).value)}
         required
         placeholder="you@example.com"
+        error={field("email")}
       />
 
       <Input
@@ -60,10 +50,9 @@ export default function LoginForm() {
         label="Password"
         id="password"
         name="password"
-        value={password}
-        onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
         required
         placeholder="••••••••"
+        error={field("password")}
       />
 
       <Button type="submit" buttonType="primary" disabled={loading}>
