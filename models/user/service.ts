@@ -16,6 +16,7 @@ export function sanitizeUser(user: UserDetails): UserResponse {
     _id: user._id!.toString(),
     email: user.email,
     name: user.name,
+    mobile: user.mobile,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
     role: user.role,

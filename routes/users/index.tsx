@@ -9,6 +9,7 @@ import { PlusIcon } from "@/components/icons/PlusIcon.tsx";
 import neatCsv from "neat-csv";
 import camelcase from "camelcase";
 import UploadUsers from "@/islands/UploadUsers.tsx";
+import { UserList } from "../../islands/user/UserList.tsx";
 
 export const handler = define.handlers({
   async GET() {
@@ -54,51 +55,48 @@ export const handler = define.handlers({
 });
 
 export default define.page<typeof handler>(function UsersPage({ data }) {
-  return (
-    <>
-      <section class="container">
-        <div class="content-box">
-          <h2>Users</h2>
-          {data.importResult &&
-            (
-              <div>
-                duplicates: {data.importResult.numberOfDublicates} <br />
-                imports: {data.importResult.numberOfImports}
-              </div>
-            )}
+  const onEdit = (userId: string) => {
+    console.log("Edit user with ID:", userId);
+  };
 
-          <div class="row row-align-right">
-            <a href="/users/create-user" class="icon-link">
-              <PlusIcon></PlusIcon>
-              <span>Create user</span>
-            </a>
-            <UploadUsers></UploadUsers>
-          </div>
-          {
-            /* <form method="post" encType="multipart/form-data">
+  const onDelete = (userId: string) => {
+    console.log("Delete user with ID:", userId);
+  };
+  return (
+    <div class="container">
+      <header class="page-header">
+        <h1>Brugere</h1>
+        <span class="page-subtitle">
+          Der er i øjeblikket {data.users?.length ?? 0} brugere
+        </span>
+      </header>
+      <div class="">
+        {data.importResult &&
+          (
+            <div>
+              duplicates: {data.importResult.numberOfDublicates} <br />
+              imports: {data.importResult.numberOfImports}
+            </div>
+          )}
+
+        <div class="row row-align-right">
+          <a href="/users/create-user" class="icon-link">
+            <PlusIcon></PlusIcon>
+            <span>Create user</span>
+          </a>
+          <UploadUsers></UploadUsers>
+        </div>
+        {
+          /* <form method="post" encType="multipart/form-data">
                 <Input type="file" name="file" label="upload csv file from conventus"></Input>
                 <button>upload</button>
             </form> */
-          }
+        }
 
-          <article class="profile-section">
-            <ul class="profile-list">
-              <li>
-                <h4>Name</h4>
-                <h4>Email</h4>
-                <h4>Role</h4>
-              </li>
-              {data.users?.map((user) => (
-                <li>
-                  <span>{user.name}</span>
-                  <span>{user.email}</span>
-                  <span>{user.role}</span>
-                </li>
-              ))}
-            </ul>
-          </article>
-        </div>
-      </section>
-    </>
+        <section class="">
+          <UserList users={data.users} />
+        </section>
+      </div>
+    </div>
   );
 });

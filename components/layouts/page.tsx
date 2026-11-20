@@ -1,5 +1,6 @@
 import { Context } from "fresh";
 import { AuthState } from "../../middleware/auth.ts";
+import { Breadcrumb, buildBreadcrumbs } from "../breadcrumb/Breadcrumb.tsx";
 import {
   LocationIcon,
   LogoIcon,
@@ -7,16 +8,19 @@ import {
   UsersIcon,
 } from "../icons/index.ts";
 import LogoutIcon from "../icons/LogoutIcon.tsx";
+import ThemeToggle from "../../islands/ThemeToggle.tsx";
 
 export function PageLayout(ctx: Context<AuthState>) {
   const { Component, state } = ctx;
-  // Redirect if not logged in
   if (!state.user) {
     return new Response(null, {
       status: 302,
       headers: { Location: "/login" },
     });
   }
+
+  const crumbs = buildBreadcrumbs(ctx.url.pathname);
+
   return (
     <>
       <header class="main-header">
@@ -62,6 +66,7 @@ export function PageLayout(ctx: Context<AuthState>) {
               </li>
             </ul>
             <div class="nav-actions">
+              <ThemeToggle />
               <span class="user-info">Welcome, {state.user.name}!</span>
               <a href="/api/auth/logout" class="nav-link">
                 <LogoutIcon />
@@ -73,8 +78,14 @@ export function PageLayout(ctx: Context<AuthState>) {
       </header>
 
       <main>
+        {crumbs.length >= 2 && (
+          <div class="container container-slim">
+            <Breadcrumb items={crumbs} />
+          </div>
+        )}
         <Component />
       </main>
+      <footer class="main-footer" />
     </>
   );
 }

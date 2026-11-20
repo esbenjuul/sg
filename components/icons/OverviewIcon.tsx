@@ -8,7 +8,6 @@ export function OverviewIcon() {
       stroke-linejoin="round"
       stroke-width="2"
       fill="none"
-      class="lucide lucide-layout-dashboard"
       data-fg-ccit17="1.28:107.357:/src/app/components/Layout.tsx:67:17:2741:18:e:Icon"
       data-fgid-ccit17=":r1u:"
       viewBox="0 0 24 24"

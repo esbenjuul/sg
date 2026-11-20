@@ -16,7 +16,7 @@ export type ConventusUser = {
 };
 
 export interface User {
-  _id?: ObjectId;
+  _id: ObjectId;
   name: string;
   email: string;
   password: string;
@@ -36,6 +36,7 @@ export interface UserDetails extends User {
 export interface UserResponse {
   _id: string;
   email: string;
+  mobile?: string;
   name: string;
   createdAt: Date;
   updatedAt: Date;

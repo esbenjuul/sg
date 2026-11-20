@@ -1,0 +1,29 @@
+.user-card {
+  display: flex;
+  flex-direction: column;
+
+  gap: calc(var(--spacing) * 3);
+  background-color: var(--bg-card-surface);
+  border: 1px solid var(--color-border);
+  padding: calc(var(--spacing) * 5);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-md);
+  color: var(--color-text-muted);
+
+  .detail:not(:last-child) {
+    margin-bottom: calc(var(--spacing) * 0.5);
+  }
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: calc(var(--spacing) * 3);
+    gap: calc(var(--spacing) * 2);
+    > .button:first-child {
+      width: 100%;
+      > div {
+        justify-content: center;
+      }
+    }
+  }
+}

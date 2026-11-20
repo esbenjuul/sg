@@ -1,4 +1,9 @@
 .main-header {
+  --icon-color: var(--color-icon-contrast);
+  font-family: var(--font-family-secondary);
+  font-weight: 400;
+  font-optical-sizing: auto;
+
   .logo {
     width: 60px;
   }
@@ -71,7 +76,7 @@
   color: var(--color-font-primary-inverted);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
-  font-size: var(--text-size-sm);
+  font-size: var(--text-size-md);
   transition: color 0.2s, background-color 0.2s;
   border-radius: var(--spacing);
   line-height: 1rem;
@@ -86,5 +91,32 @@
   }
   &.active {
     background-color: var(--bg-button-primary-nav-active);
+  }
+}
+
+.theme-toggle {
+  appearance: none;
+  background: transparent;
+  border: 1px solid
+    color-mix(in srgb, var(--color-font-primary-inverted) 28%, transparent);
+  cursor: pointer;
+  font: inherit;
+
+  > .icon {
+    margin-right: 0.35rem;
+  }
+
+  &:hover {
+    background-color: var(--bg-button-primary-nav-hover);
+  }
+}
+
+@media (max-width: 720px) {
+  .theme-toggle-label {
+    display: none;
+  }
+
+  .theme-toggle > .icon {
+    margin-right: 0;
   }
 }

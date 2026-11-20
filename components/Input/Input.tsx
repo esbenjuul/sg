@@ -4,7 +4,19 @@ import "./input.css";
 const MIN_LENGTH_MSG = (num: number) => `Must be at least ${num} characters`;
 const MAX_LENGTH_MSG = (num: number) => `Must be at most ${num} characters`;
 
-export function Input(props) {
+export function Input(props: {
+  id: string;
+  type: string;
+  name: string;
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  value?: string;
+  onInput?: (e: Event) => void;
+  onChange?: (e: Event) => void;
+}) {
   const [valid, setValid] = useState(true);
   const [message, setMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -44,6 +56,8 @@ export function Input(props) {
         placeholder={props.placeholder}
         required={props.required}
         ref={inputRef}
+        value={props.value}
+        onChange={props.onChange}
       />
       {hint && <p class="form-hint">{hint}</p>}
     </div>

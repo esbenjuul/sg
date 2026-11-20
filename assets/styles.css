@@ -8,7 +8,7 @@
 }
 
 body {
-  font-family: "Jost", sans-serif;
+  font-family: var(--font-family-primary);
   font-optical-sizing: auto;
 
   font-style: normal;
@@ -18,10 +18,30 @@ body {
   background: var(--bg-page-main);
   min-height: 100vh;
 }
+
+.font-interactive {
+  font-family: var(--font-family-secondary);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
 main {
-  .container {
+  .container:not(.container-slim) {
     margin-block: 2rem;
   }
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin-block: 1rem;
+}
+svg {
+  display: block;
+  fill: currentColor;
+  stroke: currentColor;
+  color: var(--icon-color, var(--text-primary));
 }
 .reset-button {
   background: none;
@@ -66,7 +86,7 @@ main {
   }
 }
 .spacer {
-  margin-block: 5rem;
+  margin-block: 3rem;
 }
 .row {
   display: flex;
@@ -165,7 +185,7 @@ main {
 }
 
 /* Forms */
-form {
+form, .form-group {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -206,7 +226,6 @@ form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  margin-block: 4rem;
 }
 .content-box {
   background: var(--bg-card);
@@ -228,69 +247,12 @@ form {
   text-transform: uppercase;
 }
 
-.profile-section {
-  border-top: 2px solid var(--border);
-  padding-top: 2rem;
-}
-
-.profile-section h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-}
-
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.profile-field {
-  display: flex;
-  gap: 0.75rem;
-  padding: 0.75rem 0;
-}
-
-.profile-label {
-  color: var(--text-secondary);
-  font-weight: 600;
-  min-width: 100px;
-}
-
-.profile-value {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.profile-value.mono {
-  font-family:
-    "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New",
-    monospace;
-  font-size: 0.875rem;
-  background: var(--bg-main);
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-}
-
-.profile-list {
+.card-grid {
   list-style: none;
-  display: flex;
-  flex-direction: column;
-
-  li {
-    display: flex;
-    padding-block: 1.5rem;
-    justify-content: flex-start;
-    gap: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  h4 {
-    font-weight: bold;
-  }
-  h4, span {
-    flex: 1;
-  }
+  display: grid;
+  grid-template-columns: repeat(3, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 /* Dashboard Cards */
@@ -386,4 +348,15 @@ form {
 .dashboard-card,
 .auth-card {
   animation: fadeIn 0.5s ease-out;
+}
+
+.detail {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 2);
+  font-size: var(--text-size-sm);
+  > .icon {
+    width: 14px;
+    aspect-ratio: 1;
+  }
 }

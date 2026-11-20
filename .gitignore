@@ -24,3 +24,8 @@ Thumbs.db
 
 # Dependencies
 node_modules/
+
+# Storybook
+storybook-static/
+*storybook.log
+debug-storybook.log
