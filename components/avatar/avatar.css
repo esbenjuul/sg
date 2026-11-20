@@ -1,0 +1,40 @@
+.avatar {
+  display: flex;
+  gap: calc(var(--spacing) * 0.5);
+  > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-border);
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  .avatar-text {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+  }
+
+  .avatar-name {
+    font-size: var(--text-size-normal);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+  }
+  .avatar-manchet {
+    font-size: var(--text-size-sm);
+    color: var(--color-text-muted);
+  }
+}
+.avatar-one-line {
+  .avatar-text {
+    flex-direction: row;
+    align-items: center;
+  }
+}

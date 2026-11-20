@@ -1,3 +1,5 @@
-// This file is for client-side hydration
-// Fresh 2 handles hydration automatically
-export {};
+// Import CSS here so Vite can HMR stylesheets.
+import "./assets/style/theme.css";
+import "./assets/styles.css";
+import "./assets/header.css";
+import "./components/breadcrumb/breadcrumb.css";

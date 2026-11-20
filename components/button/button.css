@@ -1,6 +1,6 @@
-
 /* Buttons */
 .button {
+  font-family: var(--font-family-secondary);
   display: inline-block;
   padding-inline: 1.5rem;
   border-radius: 0.5rem;
@@ -16,13 +16,18 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    >span {
-        white-space: nowrap;
+    > span {
+      white-space: nowrap;
     }
-    >svg {
-        width: 24px;
-        
-        fill: currentColor;
+    > .icon {
+      width: 24px;
+
+      fill: currentColor;
+    }
+    > .icon-stoke {
+      width: 24px;
+      stroke: currentColor;
+      fill: none;
     }
   }
 }
@@ -41,7 +46,18 @@
 .button-secondary {
   background: transparent;
   color: var(--text-primary);
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
+}
+.button-danger {
+  --icon-color: var(--color-text-danger);
+  background: transparent;
+  color: var(--color-text-danger);
+  border: 1px solid var(--color-text-danger);
+  > div {
+    > .icon {
+      fill: none;
+    }
+  }
 }
 
 .button-secondary:hover {
@@ -61,7 +77,6 @@
   transform: none !important;
 }
 button:invalid {
-  
-    cursor: not-allowed;
-    background-color: var(--color-bg-invalid);
+  cursor: not-allowed;
+  background-color: var(--color-bg-invalid);
 }

@@ -13,9 +13,17 @@ export default function App({ Component }: PageProps) {
           href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet"
         />
-        <link rel="stylesheet" href="/style/theme.css" />
-        <link rel="stylesheet" href="/styles.css" />
-        <link rel="stylesheet" href="/header.css" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+          rel="stylesheet"
+        >
+        </link>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              `(function(){try{var t=localStorage.getItem("theme");if(t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme:dark)").matches))document.documentElement.classList.add("dark")}catch(e){}})();`,
+          }}
+        />
       </head>
       <body>
         <Component />

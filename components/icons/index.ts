@@ -2,6 +2,9 @@
 export * from "./ArrowLeftIcon.tsx";
 export * from "./CloseIcon.tsx";
 export * from "./DotsIcon.tsx";
+export * from "./MailIcon.tsx";
+export * from "./PhoneIcon.tsx";
+export * from "./BinIcon.tsx";
 export * from "./ImportIcon.tsx";
 export * from "./LocationIcon.tsx";
 export * from "./LogoIcon.tsx";
@@ -11,3 +14,5 @@ export * from "./PlusIcon.tsx";
 export * from "./TutorIcon.tsx";
 export * from "./UsersIcon.tsx";
 export * from "./LogoutIcon.tsx";
+export * from "./MoonIcon.tsx";
+export * from "./SunIcon.tsx";

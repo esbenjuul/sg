@@ -1,8 +1,8 @@
 import type { Preview } from "@storybook/preact-vite";
 
-import "../static/style/theme.css";
-import "../static/styles.css";
-import "../static/header.css";
+import "../assets/style/theme.css";
+import "../assets/styles.css";
+import "../assets/header.css";
 
 const preview: Preview = {
   parameters: {

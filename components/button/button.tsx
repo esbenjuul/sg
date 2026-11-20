@@ -3,7 +3,7 @@ import { useRef, useState } from "preact/hooks";
 import "./button.css";
 
 export interface ButtonProps extends ButtonHTMLAttributes {
-  buttonType: "primary" | "secondary" | "tertery";
+  buttonType: "primary" | "secondary" | "tertery" | "danger";
   loading?: boolean;
   onClick?: (e: Event) => void;
 }

@@ -82,8 +82,11 @@
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
+  --color-gray-250: #e0e0e0; /* Ekstra lys grå til baggrundsfarver */
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
   --color-gray-600: #4b5563;
-
   --color-gray-700: #374151;
   --color-gray-800: #1f2937;
   --color-gray-900: #111827;
@@ -93,16 +96,23 @@
   --color-system-success: #10b981;
   --color-system-warning: #f59e0b;
   --color-system-info: #3b82f6;
+  --color-system-error: #c0392b;
 
   /* Statiske farver */
   --color-static-white: #ffffff;
   /* ==========================================
        🖋 TYPOGRAFI & TEKSTSTØRRELSER
        ========================================== */
+
+  --font-family-primary: "Jost", system-ui, sans-serif;
+  --font-family-secondary: "Inter", system-ui, sans-serif;
   --text-size-base: 1rem;
-  --text-size-md: calc(14 / 16 * 1rem);
+  --text-size-xs: calc(10 / 16 * 1rem);
   --text-size-sm: calc(12 / 16 * 1rem);
-  --text-size-lg: calc(24 / 16 * 1rem);
+  --text-size-md: calc(14 / 16 * 1rem);
+  --text-size-normal: 1rem;
+  --text-size-lg: calc(20 / 16 * 1rem);
+  --text-size-xl: calc(24 / 16 * 1rem);
 
   /* ==========================================
      ☀️ SEMANTIC TOKENS - LYST TEMA (Standard)
@@ -111,11 +121,11 @@
   --bg-card-surface: var(--color-static-white);
   --bg-navigation-sidebar: var(--color-gray-900);
   --bg-navigation-item-active: var(--color-brand-blue);
-  --border-subtle: var(--color-gray-200);
 
   /* Brand-tonede overflader (Lyst tema) */
   --bg-surface-blue-subtle: var(--color-brand-blue-50);
   --bg-surface-red-subtle: var(--color-brand-red-50);
+  --color-muted-foreground: var(--color-gray-200);
 
   /* Interaktive elementer / Knapper */
   --bg-button-primary: var(--color-brand-blue);
@@ -126,9 +136,12 @@
   --bg-button-action: var(--color-brand-red);
   --bg-button-action-hover: #b82224;
 
+  --color-border: var(--color-gray-250);
   /* Tekst & Typografi */
   --text-primary: var(--color-gray-800);
-  --text-muted: var(--color-gray-600);
+  --color-text-secondary: var(--color-brand-blue-600);
+  --color-text-muted: var(--color-gray-600);
+  --color-text-danger: var(--color-system-error);
   --text-high-contrast: var(--color-static-white);
   --text-brand-link: var(--color-brand-blue);
   --text-surface-blue-subtle: var(
@@ -147,40 +160,65 @@
 /* ==========================================
    🌙 SEMANTIC TOKENS - MØRKT TEMA
    ========================================== */
-body.dark, [data-theme="dark"] {
-  --bg-page-main: var(--color-gray-950); /* Super mørk dashboard-bund */
-  --bg-card-surface: var(--color-gray-900); /* Mørke datakort og tabeller */
-  --bg-navigation-sidebar: var(
-    --color-gray-950
-  ); /* Endnu mørkere eller matchende menu */
+.dark {
+  /* Legacy tokens used across stylesheets */
+  --primary: #3d6bb5;
+  --primary-dark: color-mix(in srgb, var(--primary) 85%, black);
+  --primary-light: color-mix(in srgb, var(--primary) 70%, white);
+  --color-font-primary: var(--color-gray-50);
+  --color-font-primary-inverted: #ffffff;
+  --color-icon-contrast: #e5e5ff;
+  --bg-main: var(--color-gray-950);
+  --bg-card: var(--color-gray-900);
+  --text-primary: var(--color-gray-50);
+  --text-secondary: var(--color-gray-400);
+  --text-light: var(--color-gray-400);
+  --border: var(--color-gray-700);
+  --color-border: var(--color-gray-700);
+  --error-bg: color-mix(in srgb, var(--error) 18%, var(--color-gray-950));
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.45);
+  --accent: #8bb8c7;
+
+  /* Semantic tokens */
+  --bg-page-main: var(--color-gray-950);
+  --bg-card-surface: var(--color-gray-900);
+  --bg-navigation-sidebar: var(--color-gray-950);
   --bg-navigation-item-active: var(--color-brand-blue);
-  --border-subtle: var(--color-gray-800); /* Mørke, diskrete skillelinjer */
+  --color-muted-foreground: var(--color-gray-700);
 
-  /* Brand-tonede overflader (Mørkt tema) */
+  --border-subtle: var(--color-gray-800);
+
   --bg-surface-blue-subtle: var(--color-brand-blue-900);
-  --text-surface-blue-subtle: #93b4ed; /* Lysere blå tekst for læsbarhed på mørk bund */
-
+  --text-surface-blue-subtle: #93b4ed;
   --bg-surface-red-subtle: var(--color-brand-red-900);
-  --text-surface-red-subtle: #f79495; /* Lysere rød tekst for læsbarhed på mørk bund */
+  --text-surface-red-subtle: #f79495;
 
-  /* Interaktive elementer / Knapper */
   --bg-button-primary: var(--color-brand-blue);
-  --bg-button-primary-hover: #2a56a6; /* Lidt lysere blå til hover i mørke */
+  --bg-button-primary-hover: #2a56a6;
+  --bg-button-primary-nav: var(--color-brand-blue-400);
+  --bg-button-primary-nav-hover: var(--color-brand-blue-500);
+  --bg-button-primary-nav-active: var(--color-brand-blue-600);
   --bg-button-action: var(--color-brand-red);
-  --bg-button-action-hover: #f04446; /* Lidt lysere rød til hover i mørke */
+  --bg-button-action-hover: #f04446;
 
-  /* Tekst & Typografi */
-  --text-primary: var(
-    --color-gray-50
-  ); /* Næsten helt hvid tekst for høj kontrast */
-  --text-muted: var(--color-gray-500); /* Dæmpet tekst til detaljer */
+  --color-text-secondary: var(--color-brand-blue-600);
+  --color-text-muted: var(--color-gray-400);
+  --text-high-contrast: var(--color-static-white);
   --text-on-dark: var(--color-static-white);
-  --text-brand-link: #4f7cd1; /* En lysere, mere læsbar blå på mørk bund */
+  --text-brand-link: #7aa2e8;
 
-  /* Statusser bevarer deres farver, da de lyser flot op på mørk baggrund */
   --status-success: var(--color-system-success);
   --status-warning: var(--color-system-warning);
   --status-info: var(--color-system-info);
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: var(--color-gray-900);
+  color: var(--text-primary);
+  color-scheme: dark;
 }
 
 /* 
