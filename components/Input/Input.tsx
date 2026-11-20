@@ -16,6 +16,8 @@ export function Input(props: {
   value?: string;
   onInput?: (e: Event) => void;
   onChange?: (e: Event) => void;
+  /** Error message to show, e.g. a field error from an API response. */
+  error?: string;
 }) {
   const [valid, setValid] = useState(true);
   const [message, setMessage] = useState("");
