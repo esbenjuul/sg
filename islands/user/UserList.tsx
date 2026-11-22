@@ -1,22 +1,28 @@
 import { useState } from "preact/hooks";
-import Dialog from "@/components/dialog/dialog.tsx";
-import { Select } from "@/components/select/select.tsx";
+import { fetchApi } from "@/api/client.ts";
+import type { InputOf } from "@/api/contract.ts";
+import { updateUser } from "@/api/contracts/user.ts";
 import { UserCard } from "@/components/usercard/UserCard.tsx";
 import { UserDetails } from "@/models/user/types.ts";
 import { UserDialog } from "./UserDialog.tsx";
 import { ObjectId } from "mongodb";
 
 export function UserList({ users }: { users: UserDetails[] }) {
+  // Local copy so the list can reflect saved changes without a reload.
+  const [list, setList] = useState(users);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<UserDetails | null>(null);
+
   const onEdit = (userId: ObjectId) => {
     if (!userId) {
       console.error("User ID is undefined or null");
       return;
     }
-    const user = users.find((user) => user._id === userId);
+    const user = list.find((user) => user._id === userId);
     setCurrentUser(user || null);
     setDialogOpen(true);
-    console.log("Edit user with ID:", userId);
   };
+
   const onDelete = (userId: ObjectId) => {
     if (!userId) {
       console.error("User ID is undefined or null");
@@ -24,34 +30,52 @@ export function UserList({ users }: { users: UserDetails[] }) {
     }
     console.log("Delete user with ID:", userId);
   };
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<UserDetails | null>(null);
-  const updateUser = async (user: UserDetails | null) => {
+
+  const saveUser = async (user: UserDetails | null) => {
     setCurrentUser(null);
-    if (user) {
-      console.log("User updated:", user);
-      // Here you would typically send the updated user data to your backend or update your state
-    } else {
-      console.log("User dialog closed without saving changes.");
-    }
     setDialogOpen(false);
+    if (!user) return; // dialog was cancelled
+
+    // No cast: TypeScript checks this object against the contract's schema.
+    // `_id` arrives as a string after island serialization; String() makes
+    // that explicit and satisfies the `id: string` the schema expects.
+    const input: InputOf<typeof updateUser> = {
+      id: String(user._id),
+      name: user.name,
+      email: user.email,
+      mobile: user.mobile,
+    };
+
+    const result = await fetchApi(updateUser, input);
+    if (!result.ok) {
+      // Same shape for client-side validation, server errors and network errors.
+      console.error(result.error.message, result.error.fields);
+      return;
+    }
+
+    // result.data is typed as OutputOf<typeof updateUser> = { user: UserProfile }
+    const saved = result.data.user;
+    setList((prev) =>
+      prev.map((u) =>
+        String(u._id) === saved.id
+          ? { ...u, name: saved.name, email: saved.email, mobile: saved.mobile }
+          : u
+      )
+    );
   };
+
   return (
     <>
       <ul class="card-grid">
-        {users?.map((user) => (
+        {list.map((user) => (
           <li>
-            <UserCard
-              onEdit={onEdit}
-              onDelete={onDelete}
-              user={user}
-            />
+            <UserCard onEdit={onEdit} onDelete={onDelete} user={user} />
           </li>
         ))}
       </ul>
       <UserDialog
         isOpen={isDialogOpen}
-        onClose={updateUser}
+        onClose={saveUser}
         user={currentUser}
       />
     </>

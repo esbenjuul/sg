@@ -202,7 +202,7 @@
   --bg-button-action: var(--color-brand-red);
   --bg-button-action-hover: #f04446;
 
-  --color-text-secondary: var(--color-brand-blue-600);
+  --color-text-secondary: var(--color-brand-blue-100);
   --color-text-muted: var(--color-gray-400);
   --text-high-contrast: var(--color-static-white);
   --text-on-dark: var(--color-static-white);

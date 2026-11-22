@@ -1,29 +1,29 @@
-import { ButtonHTMLAttributes } from "preact";
-import { useRef, useState } from "preact/hooks";
+import type { ButtonHTMLAttributes } from "preact";
 import "./button.css";
 
 export interface ButtonProps extends ButtonHTMLAttributes {
   buttonType: "primary" | "secondary" | "tertery" | "danger";
   loading?: boolean;
-  onClick?: (e: Event) => void;
 }
 
-export function Button(props: ButtonProps) {
-  const [message, setMessage] = useState("");
-  const inputRef = useRef<HTMLButtonElement>(null);
-  const buttonClick = (e: Event) => {
-    console.log(e);
-    props.onClick ? props.onClick(e) : null;
-  };
-
+/**
+ * Thin wrapper around the native <button>. All native attributes
+ * (id, aria-*, popovertarget, style, …) are forwarded.
+ */
+export function Button(
+  { buttonType, loading, class: className, children, type, ...rest }:
+    ButtonProps,
+) {
   return (
     <button
-      onClick={buttonClick}
-      class={`button button-${props.buttonType}`}
-      type={props.type}
-      disabled={props.disabled}
+      {...rest}
+      type={type ?? "button"}
+      class={["button", `button-${buttonType}`, className]
+        .filter(Boolean)
+        .join(" ")}
+      aria-busy={loading || undefined}
     >
-      <div>{props.children}</div>
+      <div>{children}</div>
     </button>
   );
 }

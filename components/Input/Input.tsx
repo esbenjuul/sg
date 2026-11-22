@@ -27,7 +27,7 @@ export function Input(props: {
     if (inputRef?.current) {
       setValid(inputRef?.current?.validity.valid);
     }
-    console.log(inputRef?.current?.validity);
+
     if (!valid && props.minLength && inputRef?.current?.validity.tooShort) {
       setMessage(MIN_LENGTH_MSG(props.minLength));
     } else if (
