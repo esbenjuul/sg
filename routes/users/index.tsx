@@ -5,11 +5,10 @@ import {
   importUsers,
 } from "@/models/user/index.ts";
 import { define } from "@/utils/state.ts";
-import { PlusIcon } from "@/components/icons/PlusIcon.tsx";
 import neatCsv from "neat-csv";
 import camelcase from "camelcase";
-import UploadUsers from "@/islands/UploadUsers.tsx";
 import { UserList } from "../../islands/user/UserList.tsx";
+import { UserMenu } from "../../islands/user/UserMenu.tsx";
 
 export const handler = define.handlers({
   async GET() {
@@ -22,18 +21,16 @@ export const handler = define.handlers({
     }
   },
   async POST(ctx) {
+    // Importing creates users, so it's admin-only like POST /api/users.
+    if (ctx.state.user?.role !== "admin") {
+      throw new HttpError(403, "Only admins can import users");
+    }
     const form = await ctx.req.formData();
-    const file = form.get("file") as File;
-
-    if (!file) {
-      {
-        data: {
-          message: "Please try again";
-        }
-      }
+    const file = form.get("file");
+    if (!(file instanceof File) || file.size === 0) {
+      throw new HttpError(400, "Please choose a CSV file to import");
     }
 
-    const name = file.name;
     const contents = await file.text();
     const parsed = await neatCsv(contents, {
       separator: ";",
@@ -54,21 +51,17 @@ export const handler = define.handlers({
   },
 });
 
-export default define.page<typeof handler>(function UsersPage({ data }) {
-  const onEdit = (userId: string) => {
-    console.log("Edit user with ID:", userId);
-  };
-
-  const onDelete = (userId: string) => {
-    console.log("Delete user with ID:", userId);
-  };
+export default define.page<typeof handler>(function UsersPage({ data, state }) {
   return (
     <div class="container">
       <header class="page-header">
         <h1>Brugere</h1>
-        <span class="page-subtitle">
+        <span class="page-header-subtitle">
           Der er i øjeblikket {data.users?.length ?? 0} brugere
         </span>
+        <div class="page-header-action">
+          {state.user?.role === "admin" && <UserMenu />}
+        </div>
       </header>
       <div class="">
         {data.importResult &&
@@ -78,20 +71,6 @@ export default define.page<typeof handler>(function UsersPage({ data }) {
               imports: {data.importResult.numberOfImports}
             </div>
           )}
-
-        <div class="row row-align-right">
-          <a href="/users/create-user" class="icon-link">
-            <PlusIcon></PlusIcon>
-            <span>Create user</span>
-          </a>
-          <UploadUsers></UploadUsers>
-        </div>
-        {
-          /* <form method="post" encType="multipart/form-data">
-                <Input type="file" name="file" label="upload csv file from conventus"></Input>
-                <button>upload</button>
-            </form> */
-        }
 
         <section class="">
           <UserList users={data.users} />

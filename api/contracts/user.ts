@@ -17,6 +17,28 @@ export const UserProfile = v.object({
 });
 export type UserProfile = v.InferOutput<typeof UserProfile>;
 
+/** Creates a user. Empty optional fields are dropped. */
+export const createUser = endpoint({
+  method: "POST",
+  path: "/api/users",
+  successStatus: 201,
+  input: v.object({
+    name: v.pipe(v.string(), v.trim(), v.nonEmpty("Name is required")),
+    email: Email,
+    password: v.pipe(
+      v.string(),
+      v.minLength(6, "Password must be at least 6 characters"),
+    ),
+    mobile: v.optional(
+      v.pipe(v.string(), v.trim(), v.transform((s) => s || undefined)),
+    ),
+    birthday: v.optional(
+      v.pipe(v.string(), v.trim(), v.transform((s) => s || undefined)),
+    ),
+  }),
+  output: v.object({ user: UserProfile }),
+});
+
 /**
  * Partial update. Omitted fields are left unchanged; unknown fields
  * (e.g. `password`) are stripped. `role` and `status` are admin-only.

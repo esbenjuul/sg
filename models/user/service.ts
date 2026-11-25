@@ -25,7 +25,7 @@ export function sanitizeUser(user: UserDetails): UserResponse {
 
 export async function createUser(
   input: CreateUserInput,
-): Promise<UserResponse> {
+): Promise<UserProfile> {
   const existingUser = await repository.findByEmail(input.email);
   if (existingUser) {
     throw new ConflictError("User already exists");
@@ -46,15 +46,7 @@ export async function createUser(
   };
 
   const insertedId = await repository.insertUser(user);
-
-  return {
-    _id: insertedId.toString(),
-    email: user.email,
-    name: user.name,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
-    role: user.role,
-  };
+  return toUserProfile({ ...user, _id: insertedId });
 }
 
 /** Returns credentials including password hash — for auth only. */

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "preact/hooks";
 import type { HTMLAttributes, TargetedKeyboardEvent } from "preact";
 import "./dialog.css";
 import { CloseIcon } from "../icons/CloseIcon.tsx";
-import { Button } from "../index.ts";
+import { Button } from "../button/button.tsx";
 
 export type CloseReason = "cancel" | "confirm";
 

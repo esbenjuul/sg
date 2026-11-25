@@ -53,12 +53,12 @@ export function updateUserHandler(deps: UpdateUserDeps = { updateUser }) {
 
       const { id, ...changes } = input;
       const user = await deps.updateUser(id, changes);
-      return { user: toDto(user) };
+      return { user: toUserDto(user) };
     },
   );
 }
 
-function toDto(user: UserProfile): UserProfileDto {
+export function toUserDto(user: UserProfile): UserProfileDto {
   return {
     id: user._id,
     email: user.email,

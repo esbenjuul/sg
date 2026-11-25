@@ -48,6 +48,26 @@ svg {
   border: none;
 }
 
+.page-header {
+  display: grid;
+  grid-template-areas: "title action" "subtitle action";
+  width: 100%;
+
+  > h1 {
+    grid-area: title;
+    font-size: var(--text-size-xl);
+  }
+}
+.page-header-subtitle {
+  grid-area: subtitle;
+}
+.page-header-action {
+  grid-area: action;
+  display: flex;
+  justify-content: flex-end;
+  align-content: center;
+}
+
 .background-primary {
   background-color: var(--background);
 }

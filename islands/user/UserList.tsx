@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { fetchApi } from "@/api/client.ts";
 import type { InputOf } from "@/api/contract.ts";
 import { updateUser } from "@/api/contracts/user.ts";
@@ -6,6 +6,7 @@ import { UserCard } from "@/components/usercard/UserCard.tsx";
 import { UserDetails } from "@/models/user/types.ts";
 import { UserDialog } from "./UserDialog.tsx";
 import { ObjectId } from "mongodb";
+import { createdUser } from "@/utils/userEvents.ts";
 
 export function UserList({ users }: { users: UserDetails[] }) {
   // Local copy so the list can reflect saved changes without a reload.
@@ -13,9 +14,23 @@ export function UserList({ users }: { users: UserDetails[] }) {
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<UserDetails | null>(null);
 
+  // Prepend users created from the UserMenu island's dialog.
+  useEffect(() =>
+    createdUser.subscribe((created) => {
+      if (!created) return;
+      setList((prev) => [
+        {
+          ...created,
+          _id: created.id,
+          createdAt: new Date(created.createdAt),
+          updatedAt: new Date(created.updatedAt),
+        } as unknown as UserDetails,
+        ...prev,
+      ]);
+    }), []);
+
   const onEdit = (userId: ObjectId) => {
     if (!userId) {
-      console.error("User ID is undefined or null");
       return;
     }
     const user = list.find((user) => user._id === userId);
