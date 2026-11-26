@@ -9,6 +9,12 @@ const meta = {
     name: "role",
     label: "Role",
     required: false,
+    placeholder: "Choose a role",
+    options: [
+      { value: "admin", label: "Admin" },
+      { value: "trainer", label: "Trainer" },
+      { value: "member", label: "Member" },
+    ],
   },
 } satisfies Meta<typeof Select>;
 
@@ -23,5 +29,13 @@ export const Required: Story = {
     name: "team",
     label: "Select a team",
     required: true,
+    options: [
+      { value: "u10", label: "Ungdomsgymnastik U10" },
+      { value: "mix", label: "Teamgym mix" },
+    ],
   },
+};
+
+export const WithError: Story = {
+  args: { error: "Choose a role" },
 };

@@ -1,21 +1,37 @@
 .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   background-color: var(
     --tag-bg,
     var(--c-tag-bg, var(--color-muted-foreground))
   );
   border-radius: 0.25rem;
-  color: var(--color-white);
+  color: var(--tag-color, var(--color-white));
   font-size: var(--text-size-sm);
   font-weight: 500;
   letter-spacing: 0.025rem;
   padding: 0.15rem 0.4rem;
+  white-space: nowrap;
+}
+
+.tag-info {
+  --c-tag-tone: var(--color-system-info);
 }
 .tag-success {
-  --c-tag-bg: var(--color-success);
+  --c-tag-tone: var(--color-system-success);
 }
 .tag-warning {
-  --c-tag-bg: var(--color-warning);
+  --c-tag-tone: var(--color-system-warning);
 }
 .tag-danger {
-  --c-tag-bg: var(--color-danger);
+  --c-tag-tone: var(--color-system-error);
+}
+
+.tag-soft {
+  --tag-bg: color-mix(in srgb, var(--c-tag-tone) 12%, transparent);
+  --tag-color: color-mix(in srgb, var(--c-tag-tone) 75%, var(--text-primary));
+  border: 1px solid color-mix(in srgb, var(--c-tag-tone) 25%, transparent);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
 }

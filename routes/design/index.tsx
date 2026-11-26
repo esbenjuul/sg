@@ -77,6 +77,12 @@ export default define.page<void>(function Design() {
                 name="category"
                 label="Category"
                 required
+                placeholder="Vælg kategori"
+                options={[
+                  { value: "piger", label: "Teamgym piger" },
+                  { value: "mix", label: "Teamgym mix" },
+                  { value: "drenge", label: "Teamgym drenge" },
+                ]}
               />
             </div>
           </article>

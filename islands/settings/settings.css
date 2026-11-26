@@ -1,0 +1,133 @@
+.settings-form {
+  gap: calc(var(--spacing) * 6);
+  margin-top: calc(var(--spacing) * 6);
+}
+
+.settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 4);
+  background-color: var(--bg-card-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: calc(var(--spacing) * 5);
+  box-shadow: var(--shadow-md);
+
+  h2 {
+    font-size: var(--text-size-normal);
+    font-weight: 600;
+  }
+  .settings-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: calc(var(--spacing) * 4);
+  }
+  header p {
+    color: var(--color-text-muted);
+    font-size: var(--text-size-md);
+    max-width: 60ch;
+  }
+}
+
+.settings-row-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 3);
+}
+
+.settings-row {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr) 10rem 8rem auto;
+  align-items: start;
+  gap: calc(var(--spacing) * 4);
+  padding-block: calc(var(--spacing) * 3);
+  border-top: 1px solid var(--color-border);
+
+  &:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+.settings-row-number {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--spacing) * 1);
+  /* Lines up with the inputs below the field labels. */
+  padding-top: 2.2rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: var(--text-size-md);
+  min-width: 0;
+  .tag {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.settings-row-delete {
+  /* Same offset as the inputs. */
+  padding-top: 2.2rem;
+  .button {
+    padding-inline: 0.75rem;
+  }
+  .button > div > .icon {
+    width: 18px;
+  }
+}
+
+.settings-row-usage {
+  grid-column: 2 / -1;
+  margin-top: calc(var(--spacing) * -2);
+  font-size: var(--text-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Navn | Sted | Type | Kapacitet | delete */
+.settings-row.settings-location {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr) 10rem 8rem auto;
+}
+
+.settings-location .settings-row-usage {
+  grid-column: 1 / -1;
+}
+
+.settings-empty {
+  color: var(--color-text-muted);
+  padding: calc(var(--spacing) * 4);
+  text-align: center;
+  border: 1px dashed var(--color-border);
+  border-radius: 0.5rem;
+}
+
+.settings-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(var(--spacing) * 4);
+}
+
+.settings-saved {
+  color: var(--color-text-muted);
+  font-size: var(--text-size-md);
+}
+
+@media (max-width: 720px) {
+  .settings-row,
+  .settings-row.settings-location {
+    grid-template-columns: 1fr;
+    gap: calc(var(--spacing) * 2);
+  }
+  .settings-row-number,
+  .settings-row-delete {
+    padding-top: 0;
+  }
+  .settings-row-usage {
+    grid-column: 1;
+    margin-top: 0;
+  }
+}

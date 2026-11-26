@@ -39,8 +39,9 @@ Rules:
   `/api/users/:id` ↔ `routes/api/users/[id].ts`) and are part of the input
   schema. `fetchApi()` fills them into the URL; `handle()` merges `ctx.params`
   into the input, overriding any body value of the same name.
-- Plain page-route form posts (e.g. `routes/teams`) stay as they are; the
-  contract layer is for islands that need data without a page reload.
+- Plain page-route form posts (e.g. the CSV import on `routes/users`) stay as
+  they are; the contract layer is for islands that need data without a page
+  reload. Teams moved to contracts (`/api/teams`) with the create/edit page.
 
 ## Consequences
 

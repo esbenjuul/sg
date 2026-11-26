@@ -1,0 +1,329 @@
+.team-editor {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 6);
+
+  > form {
+    gap: calc(var(--spacing) * 6);
+  }
+
+  h2 {
+    font-size: var(--text-size-normal);
+    font-weight: 600;
+  }
+
+  /* Required fields in the basic info panel get a red asterisk. */
+  .team-panel-basic .form-field:has([required]) > label::after {
+    content: " *";
+    color: var(--color-text-danger);
+  }
+}
+
+.team-editor-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: calc(var(--spacing) * 3);
+
+  h1 {
+    font-size: var(--text-size-xl);
+    line-height: 1.3;
+  }
+  .page-header-subtitle {
+    color: var(--color-text-muted);
+  }
+}
+
+.team-editor-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-top: 0.25rem;
+  border-radius: 0.375rem;
+  > svg {
+    width: 20px;
+    --icon-color: var(--color-text-muted);
+  }
+  &:hover {
+    background: var(--bg-surface-blue-subtle);
+  }
+}
+
+.team-panel {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 4);
+  background-color: var(--bg-card-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: calc(var(--spacing) * 5);
+  box-shadow: var(--shadow-md);
+}
+
+.team-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--spacing) * 2);
+}
+
+.team-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(var(--spacing) * 4);
+}
+.team-form-wide {
+  grid-column: 1 / -1;
+}
+
+.team-role-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing) * 2);
+  margin-top: calc(var(--spacing) * -2);
+}
+
+.team-empty {
+  color: var(--color-text-muted);
+  padding: calc(var(--spacing) * 4);
+  text-align: center;
+  border: 1px dashed var(--color-border);
+  border-radius: 0.5rem;
+}
+
+.instructor-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 3);
+}
+
+.instructor-row {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 3);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: calc(var(--spacing) * 4);
+
+  > header {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+  }
+
+  .form-field label {
+    font-size: var(--text-size-sm);
+    color: var(--color-text-muted);
+  }
+}
+
+.instructor-placeholder {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+}
+
+.instructor-remove {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  padding: 2px;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  --icon-color: var(--color-text-muted);
+  &:hover {
+    background: var(--bg-surface-red-subtle);
+    --icon-color: var(--color-text-danger);
+  }
+}
+
+.instructor-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: calc(var(--spacing) * 4);
+}
+
+.instructor-cost {
+  border-top: 1px solid var(--color-border);
+  padding-top: calc(var(--spacing) * 2);
+  font-size: var(--text-size-sm);
+  color: var(--color-text-muted);
+  strong {
+    color: var(--text-primary);
+  }
+}
+
+.team-total {
+  text-align: right;
+  color: var(--color-text-muted);
+  strong {
+    color: var(--text-primary);
+  }
+}
+
+.team-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: calc(var(--spacing) * 3);
+}
+
+.team-form-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.team-hint,
+.team-warning {
+  font-size: var(--text-size-md);
+  color: var(--color-text-muted);
+  margin-top: calc(var(--spacing) * -1);
+}
+.team-warning {
+  color: color-mix(
+    in srgb,
+    var(--color-system-warning) 70%,
+    var(--text-primary)
+  );
+}
+
+.team-link-button {
+  color: var(--text-brand-link);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.season-summary {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 2);
+  background: var(--bg-page-main);
+  border-radius: 0.5rem;
+  padding: calc(var(--spacing) * 4);
+  font-size: var(--text-size-md);
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: calc(var(--spacing) * 4);
+  }
+  dt {
+    color: var(--color-text-muted);
+  }
+  dd {
+    text-align: right;
+    color: var(--color-text-muted);
+    strong {
+      color: var(--text-primary);
+    }
+  }
+  .season-result {
+    border-top: 1px solid var(--color-border);
+    padding-top: calc(var(--spacing) * 2);
+    font-size: var(--text-size-normal);
+    dt {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+  }
+  dd.season-positive strong {
+    color: var(--color-system-success);
+  }
+  dd.season-negative strong {
+    color: var(--color-text-danger);
+  }
+}
+
+@media (max-width: 720px) {
+  .team-form-grid,
+  .team-form-grid-3,
+  .instructor-fields {
+    grid-template-columns: 1fr;
+  }
+  .season-summary > div {
+    flex-direction: column;
+    gap: 0;
+  }
+  .season-summary dd {
+    text-align: left;
+  }
+}
+
+.session-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 3);
+}
+
+.session-row {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 3);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: calc(var(--spacing) * 4);
+
+  > header {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing) * 2);
+  }
+
+  .form-field label {
+    font-size: var(--text-size-sm);
+    color: var(--color-text-muted);
+  }
+}
+
+.session-title {
+  font-weight: var(--font-weight-medium);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Lokation | Ugedag | Fra | Til, with Noter on its own row. */
+.session-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) 8rem 8rem;
+  gap: calc(var(--spacing) * 4);
+}
+.session-location {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 1.5);
+  .team-warning {
+    margin-top: 0;
+  }
+}
+.session-hint {
+  font-size: var(--text-size-sm);
+  color: var(--color-text-muted);
+}
+.team-warning a {
+  color: inherit;
+  font-weight: 600;
+}
+
+.session-notes {
+  grid-column: 1 / -1;
+}
+
+.form-field input[type="time"] {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 720px) {
+  .session-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+  .session-location {
+    grid-column: 1 / -1;
+  }
+}

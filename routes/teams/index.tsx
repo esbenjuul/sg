@@ -1,147 +1,100 @@
-import { define } from "@/utils/state.ts";
 import { HttpError, page } from "fresh";
+import { SPORTS } from "@/api/contracts/team.ts";
 import Card from "@/components/card/card.tsx";
+import { PlusIcon } from "@/components/icons/index.ts";
 import { getTeams } from "@/models/team/index.ts";
 import { getUsers } from "@/models/user/index.ts";
-import AddTeamDialog, {
-  type TeamUserOption,
-} from "@/islands/AddTeamDialog.tsx";
-import { handleCreateTeam } from "./create-team.ts";
-
-export interface TeamsPageData {
-  teams: TeamCardData[];
-  users: TeamUserOption[];
-}
+import { define } from "@/utils/state.ts";
 
 interface TeamCardData {
   name: string;
-  category: string;
-  coachName: string;
+  text: string;
   image: string;
   href: string;
+}
+
+interface SportGroup {
+  sport: string;
+  teams: TeamCardData[];
+}
+
+/** Sport groups in SPORTS order; teams without a sport go last. */
+function groupBySport(
+  teams: (TeamCardData & { sport: string })[],
+): SportGroup[] {
+  const order: string[] = [...SPORTS, ""];
+  return order
+    .map((sport) => ({
+      sport: sport || "Uden sport",
+      teams: teams.filter((team) => team.sport === sport),
+    }))
+    .filter((group) => group.teams.length > 0);
 }
 
 export const handler = define.handlers({
   async GET() {
     try {
       const [teams, users] = await Promise.all([getTeams(), getUsers()]);
-      const userById = new Map(
-        users.map((user) => [user._id, user]),
-      );
+      const nameById = new Map(users.map((user) => [user._id, user.name]));
 
-      const teamCards: TeamCardData[] = teams.map((team) => {
-        const coachId = team.coachUserId?.toString();
-        const coachName = coachId ? userById.get(coachId)?.name : undefined;
+      const cards = teams.map((team) => {
+        const names = team.instructors
+          .map((i) => nameById.get(i.userId))
+          .filter(Boolean);
         return {
           name: team.name,
-          category: team.category,
-          coachName: coachName ?? "No coach assigned",
+          sport: team.sport,
+          text: names.length
+            ? `Instruktør: ${names.join(", ")}`
+            : "Ingen instruktør",
           image: team.image || "/img/gym.png",
           href: `/teams/${team.slug}`,
         };
       });
 
-      const userOptions: TeamUserOption[] = users.map((user) => ({
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      }));
-
-      return page({ teams: teamCards, users: userOptions });
+      return page({ count: teams.length, groups: groupBySport(cards) });
     } catch (err) {
       console.error(err);
-      throw new HttpError(500);
-    }
-  },
-  async POST(ctx) {
-    if (ctx.state.user?.role !== "admin") {
-      throw new HttpError(403, "Only admins can create teams");
-    }
-
-    try {
-      const form = await ctx.req.formData();
-      return await handleCreateTeam(form);
-    } catch (err) {
-      console.error(err);
-      if (err instanceof HttpError) {
-        throw err;
-      }
       throw new HttpError(500);
     }
   },
 });
 
-function getTeamsByCategory(
-  teams: TeamCardData[],
-  category: string,
-): TeamCardData[] {
-  return teams.filter((team) => team.category === category);
-}
-
-export default define.page<typeof handler>(function TeamsPage(ctx) {
-  const { user } = ctx.state;
-  const teams = ctx.data?.teams ?? [];
-  const users = ctx.data?.users ?? [];
-  const pigerTeams = getTeamsByCategory(teams, "piger");
-  const mixTeams = getTeamsByCategory(teams, "mix");
-  const drengeTeams = getTeamsByCategory(teams, "drenge");
-
+export default define.page<typeof handler>(function TeamsPage({ data, state }) {
   return (
-    <>
-      <section class="container content-box">
-        <div class="dashboard-header">
-          <h2>Teams</h2>
+    <div class="container">
+      <header class="page-header">
+        <h1>Hold</h1>
+        <span class="page-header-subtitle">
+          Der er i øjeblikket {data.count} hold
+        </span>
+        <div class="page-header-action">
+          {state.user?.role === "admin" && (
+            <a href="/teams/new" class="button button-primary">
+              <div>
+                <PlusIcon />
+                <span>Opret hold</span>
+              </div>
+            </a>
+          )}
         </div>
+      </header>
 
-        <div class="row row-split row-deck">
-          <h3>Teamgym piger</h3>
-          {user?.role === "admin" && (
-            <AddTeamDialog users={users} defaultCategory="piger" />
-          )}
-        </div>
-        <div class="dashboard-grid">
-          {pigerTeams.map((team) => (
-            <Card
-              title={team.name}
-              text={`instruktør: ${team.coachName}`}
-              img={team.image}
-              href={team.href}
-            />
-          ))}
-        </div>
-        <div class="row row-split">
-          <h3>Teamgym mix</h3>
-          {user?.role === "admin" && (
-            <AddTeamDialog users={users} defaultCategory="mix" />
-          )}
-        </div>
-        <div class="dashboard-grid">
-          {mixTeams.map((team) => (
-            <Card
-              title={team.name}
-              text={`instruktør: ${team.coachName}`}
-              img={team.image}
-              href={team.href}
-            />
-          ))}
-        </div>
-        <div class="row row-split">
-          <h3>Teamgym Drenge</h3>
-          {user?.role === "admin" && (
-            <AddTeamDialog users={users} defaultCategory="drenge" />
-          )}
-        </div>
-        <div class="dashboard-grid">
-          {drengeTeams.map((team) => (
-            <Card
-              title={team.name}
-              text={`instruktør: ${team.coachName}`}
-              img={team.image}
-              href={team.href}
-            />
-          ))}
-        </div>
-      </section>
-    </>
+      {data.groups.map((group) => (
+        <section key={group.sport}>
+          <h3>{group.sport}</h3>
+          <div class="dashboard-grid">
+            {group.teams.map((team) => (
+              <Card
+                title={team.name}
+                text={team.text}
+                img={team.image}
+                href={team.href}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
   );
 });

@@ -80,3 +80,22 @@ button:invalid {
   cursor: not-allowed;
   background-color: var(--color-bg-invalid);
 }
+
+/* Text-only button, e.g. "+ Tilføj instruktør". */
+.button-tertery {
+  background: transparent;
+  color: var(--text-brand-link, var(--primary));
+  padding-inline: 0.5rem;
+  > div > svg {
+    width: 20px;
+    color: currentColor;
+  }
+}
+.button-tertery:hover {
+  background: var(--bg-surface-blue-subtle, var(--bg-main));
+}
+
+/* Links styled as buttons: center the label vertically like <button>. */
+a.button > div {
+  height: 100%;
+}

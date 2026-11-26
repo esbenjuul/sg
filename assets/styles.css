@@ -380,3 +380,7 @@ form, .form-group {
     aspect-ratio: 1;
   }
 }
+
+.profile-list {
+  list-style: none;
+}

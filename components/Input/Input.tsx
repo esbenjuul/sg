@@ -13,6 +13,11 @@ export function Input(props: {
   required?: boolean;
   minLength?: number;
   maxLength?: number;
+  min?: number;
+  max?: number;
+  step?: number | "any";
+  /** Unit shown inside the field's right edge, e.g. "t" or "kr.". */
+  suffix?: string;
   value?: string;
   onInput?: (e: Event) => void;
   onChange?: (e: Event) => void;
@@ -45,22 +50,36 @@ export function Input(props: {
   };
   // An explicit `error` prop (e.g. from an API response) wins over native validity.
   const hint = props.error || (!valid ? message : "");
+  const input = (
+    <input
+      type={props.type}
+      id={props.id}
+      name={props.name}
+      onInput={onInput}
+      minLength={props.minLength}
+      maxLength={props.maxLength}
+      min={props.min}
+      max={props.max}
+      step={props.step}
+      placeholder={props.placeholder}
+      required={props.required}
+      aria-invalid={hint ? true : undefined}
+      ref={inputRef}
+      value={props.value}
+      onChange={props.onChange}
+    />
+  );
   return (
     <div className={`form-field ${hint ? "invalid" : ""}`}>
       <label htmlFor={props.id}>{props.label}</label>
-      <input
-        type={props.type}
-        id={props.id}
-        name={props.name}
-        onInput={onInput}
-        minLength={props.minLength}
-        maxLength={props.maxLength}
-        placeholder={props.placeholder}
-        required={props.required}
-        ref={inputRef}
-        value={props.value}
-        onChange={props.onChange}
-      />
+      {props.suffix
+        ? (
+          <div class="input-affix">
+            {input}
+            <span class="input-suffix" aria-hidden="true">{props.suffix}</span>
+          </div>
+        )
+        : input}
       {hint && <p class="form-hint">{hint}</p>}
     </div>
   );

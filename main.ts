@@ -10,6 +10,7 @@ app.use(staticFiles());
 app.layout("/dashboard", PageLayout, { skipInheritedLayouts: true });
 app.layout("/users", PageLayout, { skipInheritedLayouts: true });
 app.layout("/teams", PageLayout, { skipInheritedLayouts: true });
+app.layout("/settings", PageLayout, { skipInheritedLayouts: true });
 
 // Auth middleware
 app.use(authMiddleware);

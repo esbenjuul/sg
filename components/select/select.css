@@ -1,0 +1,27 @@
+.form-field select {
+  appearance: none;
+  padding: 0.875rem 2.5rem 0.875rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-family: inherit;
+  color: inherit;
+  background-color: var(--bg-card-surface);
+  /* Chevron drawn with two gradients so it follows the text color. */
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.25rem) 50%,
+    calc(100% - 0.9rem) 50%;
+  background-size: 0.35rem 0.35rem;
+  background-repeat: no-repeat;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 3px 1px rgba(25, 54, 77, 0.2);
+  }
+}

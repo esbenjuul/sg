@@ -24,6 +24,20 @@ export class ApiError extends Error {
   }
 }
 
+/** Throws 401 when signed out and 403 unless the user is an admin. */
+export function requireAdmin(
+  user: { role: string } | undefined,
+  /** Completes "Kun administratorer kan …", e.g. "oprette hold". */
+  action: string,
+): void {
+  if (!user) {
+    throw new ApiError(401, "unauthorized", "Du skal være logget ind");
+  }
+  if (user.role !== "admin") {
+    throw new ApiError(403, "forbidden", `Kun administratorer kan ${action}`);
+  }
+}
+
 export interface HandlerArgs<E extends Endpoint, S> {
   /** Validated (and transformed) input. */
   input: v.InferOutput<E["input"]>;

@@ -8,6 +8,9 @@ const SEGMENT_LABELS: Record<string, string> = {
   dashboard: "Oversigt",
   teams: "Hold",
   users: "Instruktører",
+  settings: "Indstillinger",
+  new: "Opret",
+  edit: "Rediger",
 };
 
 function humanizeSegment(segment: string): string {

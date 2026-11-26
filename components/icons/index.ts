@@ -11,6 +11,7 @@ export * from "./LogoIcon.tsx";
 export * from "./OverviewIcon.tsx";
 export * from "./PencilIcon.tsx";
 export * from "./PlusIcon.tsx";
+export * from "./SettingsIcon.tsx";
 export * from "./TutorIcon.tsx";
 export * from "./UsersIcon.tsx";
 export * from "./LogoutIcon.tsx";

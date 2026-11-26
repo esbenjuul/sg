@@ -1,37 +1,57 @@
-
-import { useRef, useState } from "preact/hooks";
-import { SelectHTMLAttributes } from "preact";
-
 import "../Input/input.css";
 import "./select.css";
 
+export interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
 
-export function Select(props) {
-  const [valid, setValid] = useState(true);
-  const [message, setMessage] = useState("");
-  const inputRef = useRef<HTMLSelectElement>(null);
+export interface SelectProps {
+  id: string;
+  name?: string;
+  label: string;
+  options: SelectOption[];
+  /** Shown as a disabled first option while nothing is selected. */
+  placeholder?: string;
+  value?: string;
+  defaultValue?: string;
+  required?: boolean;
+  /** Error message to show, e.g. a field error from an API response. */
+  error?: string;
+  onChange?: (value: string, e: Event) => void;
+}
 
-  const onChange = (e: Event) => {
-    
-    if (props.onChange) {
-      props.onChange(e);
-    }
-  };
+export function Select(props: SelectProps) {
   return (
-    <div className={`form-field ${valid ? "" : "invalid"}`}>
+    <div className={`form-field ${props.error ? "invalid" : ""}`}>
       <label htmlFor={props.id}>{props.label}</label>
       <select
         id={props.id}
         name={props.name}
+        value={props.value}
         defaultValue={props.defaultValue}
-        value=""
-        onChange={onChange}
         required={props.required}
-        ref={inputRef}
+        aria-invalid={props.error ? true : undefined}
+        onChange={(e) =>
+          props.onChange?.((e.target as HTMLSelectElement).value, e)}
       >
-
+        {props.placeholder !== undefined && (
+          <option value="" disabled={props.required}>
+            {props.placeholder}
+          </option>
+        )}
+        {props.options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+            disabled={option.disabled}
+          >
+            {option.label}
+          </option>
+        ))}
       </select>
-      {!valid && <p class="form-hint">{message}</p>}
+      {props.error && <p class="form-hint">{props.error}</p>}
     </div>
   );
 }

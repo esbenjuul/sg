@@ -5,6 +5,7 @@ import {
   LocationIcon,
   LogoIcon,
   OverviewIcon,
+  SettingsIcon,
   UsersIcon,
 } from "../icons/index.ts";
 import LogoutIcon from "../icons/LogoutIcon.tsx";
@@ -64,6 +65,14 @@ export function PageLayout(ctx: Context<AuthState>) {
                   <span>Lokationer</span>
                 </a>
               </li>
+              {state.user.role === "admin" && (
+                <li>
+                  <a class="nav-link" href="/settings">
+                    <SettingsIcon />
+                    <span>Indstillinger</span>
+                  </a>
+                </li>
+              )}
             </ul>
             <div class="nav-actions">
               <ThemeToggle />
