@@ -31,6 +31,15 @@ import { Input } from "@/components/Input/Input.tsx";
 import { Select } from "@/components/select/select.tsx";
 import { Tag } from "@/components/tag/Tag.tsx";
 import { Textarea } from "@/components/textarea/Textarea.tsx";
+import {
+  kr,
+  minutesBetween,
+  num,
+  pct,
+  signedKr,
+  WEEKS_PER_MONTH,
+  weeksBetween,
+} from "@/utils/teamEconomics.ts";
 import "./team-editor.css";
 
 export interface InstructorOption {
@@ -57,20 +66,6 @@ interface Row {
   hours: string;
 }
 
-/** Average weeks per month, used for the monthly estimate. */
-const WEEKS_PER_MONTH = 4.33;
-
-const kr = new Intl.NumberFormat("da-DK", { maximumFractionDigits: 0 });
-const signedKr = new Intl.NumberFormat("da-DK", {
-  maximumFractionDigits: 0,
-  signDisplay: "exceptZero",
-});
-const pct = new Intl.NumberFormat("da-DK", {
-  style: "percent",
-  maximumFractionDigits: 0,
-});
-const num = new Intl.NumberFormat("da-DK", { maximumFractionDigits: 1 });
-
 function hoursOf(row: Row): number {
   const hours = Number(row.hours.replace(",", "."));
   return row.hours.trim() === "" || Number.isNaN(hours) ? NaN : hours;
@@ -84,14 +79,6 @@ function optionalNumber(value: string): number | undefined {
 
 function isNumber(value: number | undefined): value is number {
   return value !== undefined && Number.isFinite(value);
-}
-
-/** Calendar weeks from start to end date, both included. */
-function weeksBetween(start: string, end: string): number | undefined {
-  if (!start || !end) return undefined;
-  const days = (Date.parse(end) - Date.parse(start)) / 86_400_000;
-  if (!(days >= 0)) return undefined;
-  return Math.ceil((days + 1) / 7);
 }
 
 const str = (value: number | undefined) =>
@@ -113,16 +100,6 @@ interface SessionRow {
 
 const weekdayLabel = (weekday: string) =>
   WEEKDAYS.find((d) => String(d.value) === weekday)?.label;
-
-/** Minutes between two "HH:MM" times, or NaN if either is missing. */
-function minutesBetween(start: string, end: string): number {
-  const toMinutes = (t: string) => {
-    const [h, m] = t.split(":").map(Number);
-    return h * 60 + m;
-  };
-  if (!start || !end) return NaN;
-  return toMinutes(end) - toMinutes(start);
-}
 
 let nextKey = 0;
 

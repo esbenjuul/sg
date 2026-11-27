@@ -17,3 +17,5 @@ export * from "./UsersIcon.tsx";
 export * from "./LogoutIcon.tsx";
 export * from "./MoonIcon.tsx";
 export * from "./SunIcon.tsx";
+export * from "./CalendarIcon.tsx";
+export * from "./ClockIcon.tsx";

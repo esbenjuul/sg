@@ -1,9 +1,51 @@
 import { HttpError, page } from "fresh";
 import { TEAM_STATUS_LABELS, WEEKDAYS } from "@/api/contracts/team.ts";
+import {
+  TeamPage,
+  type TeamPageData,
+  type TeamPageKpi,
+} from "@/components/team/TeamPage.tsx";
 import { getSettings } from "@/models/settings/index.ts";
-import { getTeamBySlug } from "@/models/team/index.ts";
+import { getTeamBySlug, type TeamDetails } from "@/models/team/index.ts";
 import { getUsers } from "@/models/user/index.ts";
+import {
+  kr,
+  minutesBetween,
+  pct,
+  WEEKS_PER_MONTH,
+} from "@/utils/teamEconomics.ts";
 import { define } from "@/utils/state.ts";
+
+const DAY_MS = 86_400_000;
+
+/** "18. august 2025" */
+const longDate = (iso: string) =>
+  new Date(iso).toLocaleDateString("da-DK", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+
+/** Time left in the season, relative to today. */
+function remainingKpi(team: TeamDetails, today: string): TeamPageKpi {
+  const label = "Resterende";
+  const until = (iso: string) => {
+    const days = Math.ceil((Date.parse(iso) - Date.parse(today)) / DAY_MS);
+    return days < 14
+      ? `${days} ${days === 1 ? "dag" : "dage"}`
+      : `${Math.ceil(days / 7)} uger`;
+  };
+
+  if (team.startDate && today < team.startDate) {
+    return { label, value: until(team.startDate), sub: "til sæsonstart" };
+  }
+  if (!team.endDate) return { label, value: "–", sub: "ingen slutdato" };
+  if (today > team.endDate) {
+    return { label, value: "Afsluttet", sub: "sæsonen er slut" };
+  }
+  return { label, value: until(team.endDate), sub: "til sæsonslut" };
+}
 
 export const handler = define.handlers({
   async GET(ctx) {
@@ -16,155 +58,160 @@ export const handler = define.handlers({
       throw new HttpError(404, "Holdet findes ikke");
     }
 
-    const nameById = new Map(users.map((user) => [user._id, user.name]));
-    const roleLabel = new Map(
-      settings.instructorRoles.map((r) => [r.id, r.label]),
-    );
+    const userById = new Map(users.map((user) => [user._id, user]));
+    const roleById = new Map(settings.instructorRoles.map((r) => [r.id, r]));
     const locationName = new Map(
       settings.locations.map((l) => [l.id, l.name]),
     );
+    const today = new Date().toISOString().slice(0, 10);
 
-    const date = (iso?: string) =>
-      iso
-        ? new Date(iso).toLocaleDateString("da-DK", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-          timeZone: "UTC",
-        })
-        : "…";
-    const period = team.startDate || team.endDate
-      ? `${date(team.startDate)} – ${date(team.endDate)}`
+    const { memberCount: members, maxParticipants: max, price } = team;
+
+    // Instructors. A role deleted from settings falls back to its id, rate 0.
+    const rows = team.instructors.map((i) => {
+      const user = userById.get(i.userId);
+      const role = roleById.get(i.role) ??
+        { id: i.role, label: i.role, rate: 0, tone: "info" as const };
+      const weekly = i.hoursPerWeek * role.rate;
+      return {
+        name: user?.name ?? "Ukendt bruger",
+        roleLabel: role.label,
+        tone: role.tone,
+        email: user?.email,
+        mobile: user?.mobile,
+        hoursPerWeek: i.hoursPerWeek,
+        rate: role.rate,
+        weekly,
+        monthly: weekly * WEEKS_PER_MONTH,
+      };
+    });
+    const totalHours = rows.reduce((sum, r) => sum + r.hoursPerWeek, 0);
+    const totalWeekly = rows.reduce((sum, r) => sum + r.weekly, 0);
+
+    const kpis: TeamPageKpi[] = [
+      {
+        label: "Medlemmer",
+        value: members === undefined
+          ? "–"
+          : max
+          ? `${members}/${max}`
+          : `${members}`,
+        sub: members !== undefined && max
+          ? `${pct.format(members / max)} fyldt`
+          : max
+          ? `${max} pladser`
+          : undefined,
+      },
+      {
+        label: "Kontingent",
+        value: price === undefined ? "–" : `${kr.format(price)} kr.`,
+        sub: "pr. person/sæson",
+      },
+      {
+        label: "Start",
+        value: team.startDate ? longDate(team.startDate) : "–",
+        sub: "aktivitetsstart",
+      },
+      remainingKpi(team, today),
+    ];
+
+    const practical: TeamPageData["practical"] = [];
+    if (team.startDate) {
+      practical.push({
+        label: "Startdato",
+        value: longDate(team.startDate),
+        icon: "calendar",
+      });
+    }
+    if (team.endDate) {
+      practical.push({
+        label: "Slutdato",
+        value: longDate(team.endDate),
+        icon: "calendar",
+      });
+    }
+    if (team.weeks) {
+      practical.push({
+        label: "Sæsonlængde",
+        value: `${team.weeks} uger`,
+        icon: "calendar",
+      });
+    }
+    if (team.ageGroup) {
+      practical.push({
+        label: "Aldersgruppe",
+        value: team.ageGroup,
+        icon: "users",
+      });
+    }
+
+    // Sorted by weekday, then start time.
+    const sessions = [...team.sessions]
+      .sort((a, b) =>
+        a.weekday - b.weekday || a.startTime.localeCompare(b.startTime)
+      )
+      .map((s) => ({
+        day: WEEKDAYS.find((d) => d.value === s.weekday)?.label.slice(0, 3) ??
+          "?",
+        time: `${s.startTime}–${s.endTime}`,
+        hours: minutesBetween(s.startTime, s.endTime) / 60,
+        place: (s.locationId && locationName.get(s.locationId)) ??
+          s.location ?? "Ukendt lokation",
+        notes: s.notes,
+      }));
+
+    // Season economy, computed as in the team editor.
+    const income = members !== undefined && price !== undefined
+      ? members * price
       : undefined;
-    const weeks = team.weeks ? `${team.weeks} uger` : undefined;
-    const members = team.memberCount !== undefined
-      ? team.maxParticipants
-        ? `${team.memberCount} af ${team.maxParticipants} pladser`
-        : `${team.memberCount}`
+    const wages = team.weeks && totalWeekly > 0
+      ? totalWeekly * team.weeks
       : undefined;
 
-    return page({
+    const data: TeamPageData = {
       name: team.name,
       slug: team.slug,
-      sport: team.sport || "Ikke angivet",
-      ageGroup: team.ageGroup,
-      status: TEAM_STATUS_LABELS[team.status],
+      eyebrow: [team.sport || "Ingen sport", team.ageGroup]
+        .filter(Boolean)
+        .join(" · "),
       description: team.description,
-      season: [period, weeks].filter(Boolean).join(" · ") || undefined,
-      members,
-      price: team.price !== undefined
-        ? `${team.price.toLocaleString("da-DK")} kr. pr. sæson`
-        : undefined,
-      image: team.image || "/img/gym.png",
-      // Sorted by weekday, then start time.
-      sessions: [...team.sessions]
-        .sort((a, b) =>
-          a.weekday - b.weekday || a.startTime.localeCompare(b.startTime)
-        )
-        .map((s) => {
-          const day = WEEKDAYS.find((d) => d.value === s.weekday)?.label;
-          const notes = s.notes ? ` (${s.notes})` : "";
-          const place = (s.locationId && locationName.get(s.locationId)) ??
-            s.location ?? "Ukendt lokation";
-          return `${day} ${s.startTime}–${s.endTime}, ${place}${notes}`;
-        }),
-      instructors: team.instructors.map((i) => ({
-        name: nameById.get(i.userId) ?? "Ukendt bruger",
-        role: roleLabel.get(i.role) ?? i.role,
-        hoursPerWeek: i.hoursPerWeek,
+      active: team.status === "active",
+      statusLabel: team.status === "active"
+        ? "Aktiv sæson"
+        : TEAM_STATUS_LABELS[team.status],
+      kpis,
+      capacity: members !== undefined && max ? { members, max } : undefined,
+      instructors: rows.map((r) => ({
+        ...r,
+        share: totalHours > 0 ? r.hoursPerWeek / totalHours : 0,
       })),
-    });
+      totals: {
+        hours: totalHours,
+        weekly: totalWeekly,
+        monthly: totalWeekly * WEEKS_PER_MONTH,
+      },
+      practical,
+      sessions,
+      economy: {
+        income,
+        incomeHint: "Angiv medlemmer og kontingent",
+        wages,
+        wagesHint: totalWeekly > 0
+          ? "Angiv antal uger"
+          : "Ingen instruktørtimer",
+        fullIncome: max && price !== undefined ? max * price : undefined,
+        freeSpots: max && members !== undefined
+          ? Math.max(max - members, 0)
+          : undefined,
+      },
+    };
+
+    return page(data);
   },
 });
 
 export default define.page<typeof handler>(
-  function TeamDetailsPage({ data: team, state }) {
-    return (
-      <section class="container">
-        <div class="content-box">
-          <div class="row row-split row-deck">
-            <h2>{team.name}</h2>
-            <div class="row">
-              {state.user?.role === "admin" && (
-                <a href={`/teams/${team.slug}/edit`} class="icon-link">
-                  Rediger
-                </a>
-              )}
-              <a href="/teams" class="icon-link">Tilbage til hold</a>
-            </div>
-          </div>
-
-          <article class="profile-section">
-            <div class="profile-info">
-              <div class="profile-field">
-                <span class="profile-label">Sport:</span>
-                <span class="profile-value">{team.sport}</span>
-              </div>
-              {team.ageGroup && (
-                <div class="profile-field">
-                  <span class="profile-label">Aldersgruppe:</span>
-                  <span class="profile-value">{team.ageGroup}</span>
-                </div>
-              )}
-              <div class="profile-field">
-                <span class="profile-label">Status:</span>
-                <span class="profile-value">{team.status}</span>
-              </div>
-              {team.season && (
-                <div class="profile-field">
-                  <span class="profile-label">Sæson:</span>
-                  <span class="profile-value">{team.season}</span>
-                </div>
-              )}
-              {team.members && (
-                <div class="profile-field">
-                  <span class="profile-label">Medlemmer:</span>
-                  <span class="profile-value">{team.members}</span>
-                </div>
-              )}
-              {team.price && (
-                <div class="profile-field">
-                  <span class="profile-label">Kontingent:</span>
-                  <span class="profile-value">{team.price}</span>
-                </div>
-              )}
-              <div class="profile-field">
-                <span class="profile-label">Instruktører:</span>
-                <span class="profile-value">
-                  {team.instructors.length === 0 ? "Ingen" : team.instructors
-                    .map((i) =>
-                      `${i.name} (${i.role}, ${i.hoursPerWeek} t/uge)`
-                    )
-                    .join(", ")}
-                </span>
-              </div>
-              <div class="profile-field">
-                <span class="profile-label">Træninger:</span>
-                <span class="profile-value">
-                  {team.sessions.length === 0
-                    ? "Ingen"
-                    : (
-                      <ul class="profile-list">
-                        {team.sessions.map((session) => (
-                          <li key={session}>{session}</li>
-                        ))}
-                      </ul>
-                    )}
-                </span>
-              </div>
-            </div>
-            {team.description && <p>{team.description}</p>}
-          </article>
-
-          <figure style="margin-top: 1rem;">
-            <img
-              src={team.image}
-              alt={team.name}
-              style="max-width: 280px; width: 100%; border-radius: 8px;"
-            />
-          </figure>
-        </div>
-      </section>
-    );
+  function TeamDetailsPage({ data, state }) {
+    return <TeamPage data={data} isAdmin={state.user?.role === "admin"} />;
   },
 );
